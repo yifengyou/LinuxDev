@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		The precise meaning of I-O wait time in Linux
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661596&amp;idx=1&amp;sn=1934cada92c850966d0224e6f69c0c8c&amp;chksm=810f21c1b678a8d765f2a644f48d31725e333b03fe3be34fd6c60d3306ebd0e4a3214e87b2d8&amp;scene=27#wechat_redirect&cpage=50' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">The precise meaning of I/O wait time in Linux</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        转发
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2016-04-15</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p style="">Some time ago I had a discussion with some systems guys about the exact meaning of the I/O wait time which is displayed by&nbsp;<code style="">top</code>&nbsp;as a percentage of total CPU time. Their answer was that it is the time spent by the CPU(s) while waiting for outstanding I/O operations to complete. Indeed, the man page for the&nbsp;<code style="">top</code>&nbsp;command defines this as the “time waiting for I/O completion”.</p><p style="">However, this definition is obviously not correct (or at least not complete), because a CPU never spends clock cycles waiting for an I/O operation to complete. Instead, if a task running on a given CPU blocks on a synchronous I/O operation, the kernel will suspend that task and allow other tasks to be scheduled on that CPU.</p><p style="">So what is the exact definition then? There is an interesting&nbsp;Server Fault question&nbsp;that discussed this. Somebody came up with the following definition that describes I/O wait time as a sub-category of idle time:</p><blockquote style=""><p style="box-sizing: border-box;">iowait is time that the processor/processors are waiting (i.e. is in an idle state and does nothing), during which there in fact was outstanding disk I/O requests.</p></blockquote><p style="">That makes perfect sense for uniprocessor systems, but there is still a problem with that definition when applied to multiprocessor systems. In fact, “idle” is a state of a CPU, while “waiting for I/O completion” is a state of a task. However, as pointed out earlier, a task waiting for outstanding I/O operations is not running on any CPU. So how can the I/O wait time be accounted for on a per-CPU basis?</p><p style="">For example, let’s assume that on an otherwise idle system with 4 CPUs, a single, completely I/O bound task is running. Will the overall I/O wait time be 100% or 25%? I.e. will the I/O wait time be 100% on a single CPU (and 0% on the others), or on all 4 CPUs? This can be easily checked by doing a simple experiment. One can simulate an I/O bound process using the following command, which will simply read data from the hard disk as fast as it can:</p><pre style=""><code style="">dd if=/dev/sda of=/dev/null bs=1MB</code></pre><p style="">Note that you need to execute this as&nbsp;<code style="">root</code>&nbsp;and if necessary change the input file to the appropriate block device for your hard disk.</p><p style="">Looking at the CPU stats in&nbsp;<code style="">top</code>&nbsp;(press&nbsp;<code style="">1</code>&nbsp;to get per-CPU statistics), you should see something like this:</p><pre style=""><code style="">%Cpu0 &nbsp;: &nbsp;3,1 us, 10,7 sy, &nbsp;0,0 ni, &nbsp;3,5 id, 82,4 wa, &nbsp;0,0 hi, &nbsp;0,3 si, &nbsp;0,0 st
+%Cpu1 &nbsp;: &nbsp;3,6 us, &nbsp;2,0 sy, &nbsp;0,0 ni, 90,7 id, &nbsp;3,3 wa, &nbsp;0,0 hi, &nbsp;0,3 si, &nbsp;0,0 st
+%Cpu2 &nbsp;: &nbsp;1,0 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 96,3 id, &nbsp;2,3 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st
+%Cpu3 &nbsp;: &nbsp;3,0 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 96,3 id, &nbsp;0,3 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st</code></pre><p style="">This output indicates that a single I/O bound task only increases the I/O wait time on a single CPU. Note that you may see that occasionally the task “switches” from one CPU to another. That is because the Linux kernel tries to schedule a task on the CPU it ran last (in order to improve CPU cache hit rates), but this is not always possible and the task is moved on another CPU. On some systems, this may occur so frequently that the I/O wait time appears to be distributed over multiple CPUs, as in the following example:</p><pre style=""><code style="">%Cpu0 &nbsp;: &nbsp;5.7 us, &nbsp;5.7 sy, &nbsp;0.0 ni, 50.5 id, 34.8 wa, &nbsp;3.3 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu1 &nbsp;: &nbsp;3.0 us, &nbsp;3.3 sy, &nbsp;0.0 ni, 72.5 id, 20.9 wa, &nbsp;0.3 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu2 &nbsp;: &nbsp;7.0 us, &nbsp;4.3 sy, &nbsp;0.0 ni, 62.0 id, 26.7 wa, &nbsp;0.0 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu3 &nbsp;: &nbsp;4.3 us, &nbsp;2.3 sy, &nbsp;0.0 ni, 89.6 id, &nbsp;3.7 wa, &nbsp;0.0 hi, &nbsp;0.0 si, &nbsp;0.0 st</code></pre><p style="">Nevertheless, assuming that&nbsp;<code style="">dd</code>&nbsp;is the only task doing I/O on the system, there can be at most one CPU in state I/O wait at any given point in time. Indeed, 34.8+20.9+26.7+3.7=86.1 which is close to but lower than 100.</p><p style="">To make the experiment more reproducible, we can use the&nbsp;<code style="">taskset</code>&nbsp;command to “pin” a process to a given CPU (Note that the first command line argument is not the CPU number, but a mask):</p><pre style=""><code style="">taskset 1 dd if=/dev/sda of=/dev/null bs=1MB</code></pre><p style="">Another interesting experiment is to run a CPU bound task at the same time on the same CPU:</p><pre style=""><code style="">taskset 1 sh -c &quot;while true; do true; done&quot;</code></pre><p style="">The I/O wait time now drops to 0 on that CPU (and also remains 0 on the other CPUs), while user and system time account for 100% CPU usage:</p><pre style=""><code style="">%Cpu0 &nbsp;: 80,3 us, 15,5 sy, &nbsp;0,0 ni, &nbsp;0,0 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;4,3 si, &nbsp;0,0 st
+%Cpu1 &nbsp;: &nbsp;4,7 us, &nbsp;3,4 sy, &nbsp;0,0 ni, 91,3 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,7 si, &nbsp;0,0 st
+%Cpu2 &nbsp;: &nbsp;2,3 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 97,3 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st
+%Cpu3 &nbsp;: &nbsp;2,7 us, &nbsp;4,3 sy, &nbsp;0,0 ni, 93,0 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st</code></pre><p style="">That is expected because I/O wait time is a sub-category of idle time, and the CPU to which we pinned both tasks is never idle.</p><p style="">These findings allow us to deduce the exact definition of I/O wait time:</p><p style=""><em style="box-sizing: border-box;">For a given CPU, the I/O wait time is the time during which that CPU was idle (i.e. didn’t execute any tasks) and there was at least one outstanding disk I/O operation requested by a task scheduled on that CPU (at the time it generated that I/O request).</em></p><p style="">Note that the nuance is not innocent and has practical consequences. For example, on a system with many CPUs, even if there is a problem with I/O performance, the observed overall I/O wait time may still be small if the problem only affects a single task. It also means that while it is generally correct to say that faster CPUs tend to increase I/O wait time (simply because a faster CPU tends to be idle more often), that statement is no longer true if one replaces “faster” by “more”.</p><p><br  /></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">转发</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='http://veithen.github.io/2013/11/18/iowait-linux.html' target='_blank'>
+			阅读全文
+		</a>
+	</div>
+</body>

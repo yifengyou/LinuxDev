@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		报名- 《Linux文件系统与I-O流程和模型》微课(4.15-4.18)
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652664066&amp;idx=3&amp;sn=2bc781d30f88f8d1130221db028bf5c1&amp;chksm=810f379fb678be89c25fc94944ac1b35c2eca90ebe9129ac64d87ecfed05d31e740a49665341&amp;scene=27#wechat_redirect&cpage=28' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">报名: 《Linux文件系统与I/O流程和模型》微课(4.15-4.18)</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        Linux任督二脉
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2018-04-06</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(249, 110, 87);padding: 10px;box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 14px;color: rgb(142, 201, 101);box-sizing: border-box;"><p style="box-sizing: border-box;">Linux&nbsp;I/O是宋宝华老师继《Linux的任督二脉：进程调度和内存管理》第一脉《进程、线程和调度》、第二脉《内存管理》后的，进程、内存、I/O铁三角的一角。</p><p style="box-sizing: border-box;">这样，进程、内存和I/O形成了一个完整的系列。<span style="color: rgb(255, 76, 0);">这次的I/O，主要弄清从上到下发起一次Block I/O的全流程、文件系统ext4等的模型和工作方法、不同的I/O访问模型。</span></p></section></section></section></section></section></section></section><p><strong><br  /></strong></p><p><strong>上课时间:</strong> 4.15-18日，4晚，每晚9点开始，每次约70分钟。</p><p><br  /></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="white-space: normal;">上课</strong>形</strong><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">式：</strong></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;"><span style="max-width: 100%;color: rgb(0, 128, 255);box-sizing: border-box !important;word-wrap: break-word !important;">2个微信群</span>&nbsp;1个群上课采用</strong>图、语音、关键部分电脑演示录屏视频分享形式(可无限次数回看)；<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">另外1个群</strong>深度技术答疑模式和讨论。</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin: 10px 0%;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;vertical-align: top;padding: 2px 3px;background-image: url(&quot;https://mmbiz.qpic.cn/mmbiz_gif/Ass1lsY6byvOoPicG6PMTM5ACTTI483TbACIbV7tPaIZrWI9qsQicYib4YwDB2Mws7kdSJIPibApKyQ5SibZhrj30Zg/640?wx_fmt=gif&quot;);background-position: 0% 0%;background-repeat: repeat-y;background-size: 100.733%;background-attachment: scroll;line-height: 1.6;box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin: 1px 0%;text-align: center;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: transparent;padding: 10px;background-color: rgb(254, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: left;font-size: 12px;box-sizing: border-box;"><p style="box-sizing: border-box;">FAQ:</p><p style="box-sizing: border-box;"><span style="font-size: 12px;color: rgb(0, 209, 0);">如果直播的时间段在加班怎么办？<br  /></span></p><p style="box-sizing: border-box;"><span style="font-size: 12px;">提前报名后，已经加入了上课微信群，就可以收到上课内容，之后再看也没有问题。</span></p><p style="box-sizing: border-box;"><span style="font-size: 12px;color: rgb(0, 209, 0);">课程结束后能再报名吗？<br  /></span></p><p style="box-sizing: border-box;"><span style="font-size: 12px;">是不可以的，因为没有在上课前进入上课群，所以收不到上课的内容。</span></p></section></section></section></section></section></section></section></section></section></section><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><br  /></p><p><span style="color: rgb(0, 0, 0);"><strong>内容列表</strong></span><span style="color: rgb(0, 209, 0);"><strong>(大纲非最终版，还在润色和增强)</strong></span><span style="color: rgb(0, 0, 0);"><strong>:</strong></span></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;text-align: center;box-sizing: border-box;"><section class="" style="padding-left: 1em;padding-right: 1em;display: inline-block;box-sizing: border-box;"><span style="display: inline-block;padding: 0.3em 0.5em;border-radius: 0.5em;background-color: rgb(249, 110, 87);font-size: 14px;color: rgb(255, 255, 255);box-sizing: border-box;" class=""><section style="box-sizing: border-box;">第一天</section></span> </section><section class="" style="border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);margin-top: -1em;padding: 20px 10px 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: left;box-sizing: border-box;"><p style="text-align: center;"><strong><span style="font-size: 14px;">第1节&nbsp; Linux I/O和网络模型</span></strong></p><p><span style="font-size: 14px;"></span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">阻塞</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">非阻塞</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">多路复用：select和epoll</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">Signal IO</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">异步IO</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">Libevent: 事件驱动的I/O</span></p><p style="white-space: normal;background-color: rgb(239, 239, 239);"><span style="font-size: 14px;">多线程与I/O编程模型</span></p></section></section></section></section></section></section></section><p><br  /></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;text-align: center;box-sizing: border-box;"><section class="" style="padding-left: 1em;padding-right: 1em;display: inline-block;box-sizing: border-box;"><span style="display: inline-block;padding: 0.3em 0.5em;border-radius: 0.5em;background-color: rgb(249, 110, 87);font-size: 14px;color: rgb(255, 255, 255);box-sizing: border-box;" class=""><section style="box-sizing: border-box;">第二天</section></span> </section><section class="" style="border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);margin-top: -1em;padding: 20px 10px 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: left;box-sizing: border-box;"><p style="text-align: center;"><strong><span style="font-size: 14px;">第2节 文件系统的架构</span></strong></p><p><span style="font-size: 14px;">一切都是文件：VFS</span></p><p><span style="font-size: 14px;">字符设备文件、块设备文件</span></p><p><span style="font-size: 14px;">超级块、目录、inode</span></p><p><span style="font-size: 14px;">符号链接与硬链接</span></p><p><span style="font-size: 14px;">目录的组织</span></p><p><span style="font-size: 14px;">icache和dcache，slab shrink</span></p><p><span style="font-size: 14px;">块映射</span></p><p><span style="font-size: 14px;">发现并读取/usr/bin/xxx的全流程</span></p><p><span style="font-size: 14px;">用户空间的文件系统:FUSE</span></p></section></section></section></section></section></section></section><p><br  /></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;text-align: center;box-sizing: border-box;"><section class="" style="padding-left: 1em;padding-right: 1em;display: inline-block;box-sizing: border-box;"><span style="display: inline-block;padding: 0.3em 0.5em;border-radius: 0.5em;background-color: rgb(249, 110, 87);font-size: 14px;color: rgb(255, 255, 255);box-sizing: border-box;" class=""><section style="box-sizing: border-box;">第三天</section></span> </section><section class="" style="border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);margin-top: -1em;padding: 20px 10px 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: left;box-sizing: border-box;"><p style="text-align: center;"><strong><span style="font-size: 14px;">第3节 文件系统的实现</span></strong></p><p><span style="font-size: 14px;">EXT2/3/4的layout</span></p><p><span style="font-size: 14px;">文件系统的一致性:append一个文件的全流程</span></p><p><span style="font-size: 14px;">掉电与文件系统一致性</span></p><p><span style="font-size: 14px;">fsck</span></p><p><span style="font-size: 14px;">文件系统的日志</span></p><p><span style="font-size: 14px;">ext4 mount选项</span></p><p><span style="font-size: 14px;">文件系统的debug和dump</span></p><p><span style="font-size: 14px;">Copy On Write文件系统: btrfs</span></p></section></section></section></section></section></section></section><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;text-align: center;box-sizing: border-box;"><section class="" style="padding-left: 1em;padding-right: 1em;display: inline-block;box-sizing: border-box;"><span style="display: inline-block;padding: 0.3em 0.5em;border-radius: 0.5em;background-color: rgb(249, 110, 87);font-size: 14px;color: rgb(255, 255, 255);box-sizing: border-box;" class=""><section style="box-sizing: border-box;">第四天</section></span> </section><section class="" style="border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);margin-top: -1em;padding: 20px 10px 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: left;box-sizing: border-box;"><p style="text-align: center;"><strong><span style="font-size: 14px;">第4节 块I/O流程与I/O调度器</span></strong></p><p><span style="font-size: 14px;">一个块IO的一生：从page cache到bio到request</span></p><p><span style="font-size: 14px;">O_DIRECT和O_SYNC</span></p><p><span style="font-size: 14px;">blktrace</span></p><p><span style="font-size: 14px;">IO调度和CFQ调度算法</span></p><p><span style="font-size: 14px;">CFQ和ionice</span></p><p><span style="font-size: 14px;">cgroup与IO</span></p><p><span style="font-size: 14px;">io调试：iotop, iostat</span></p></section></section></section></section></section></section></section><p><br  /></p><hr  /><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">报名方法，扫码加微信，发送报名红包，加入直播群和讨论群。</strong></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">各个时段报名的价格：<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;"  /></strong></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><span style="max-width: 100%;font-size: 14px;background-color: rgb(212, 250, 0);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">早鸟期：3月</strong></span><strong><span style="max-width: 100%;font-size: 14px;background-color: rgb(212, 250, 0);box-sizing: border-box !important;word-wrap: break-word !important;">25</span></strong><span style="max-width: 100%;font-size: 14px;background-color: rgb(212, 250, 0);box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">日前(包括3月25日) 333元&nbsp; &nbsp;(前期参加了内存管理微课的童鞋可直减33元)</strong></span></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><span style="max-width: 100%;color: rgb(0, 128, 255);font-size: 14px;box-sizing: border-box !important;word-wrap: break-word !important;"></span><strong style="max-width: 100%;color: rgb(0, 128, 255);font-size: 14px;box-sizing: border-box !important;word-wrap: break-word !important;">3月25日后报名发红包 388元<strong style="color: rgb(255, 76, 65);font-size: 14px;white-space: normal;max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">&nbsp; &nbsp;(<strong style="color: rgb(255, 76, 65);font-size: 14px;white-space: normal;max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">前期参加了</strong><strong style="color: rgb(255, 76, 65);font-size: 14px;white-space: normal;max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">内存管理微课的</strong>童鞋可直减33元)</strong></strong></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;"><br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;"  /></p><p style="font-size: 16px;white-space: normal;max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);background-color: rgb(255, 255, 255);text-align: center;box-sizing: border-box !important;word-wrap: break-word !important;"><strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;"><img class="" data-ratio="1.1272321428571428" data-s="300,640" src="https://mmbiz.qpic.cn/mmbiz_png/Ass1lsY6byuWPQLcMSuSXsmcP99iagKch4GZ9Hic7cX7iaaHsJSYicvYI0JDzyOFL86Lz3g5ecy68C0ha77ia2x3dCA/640?wx_fmt=png" data-type="png" data-w="448" width="241px" style="width: 172px;height: 194px;box-sizing: border-box !important;word-wrap: break-word !important;visibility: visible !important;"  /></strong></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">Linux任督二脉</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='http://i.ijrou.com' target='_blank'>
+			我的博客
+		</a>
+	</div>
+</body>

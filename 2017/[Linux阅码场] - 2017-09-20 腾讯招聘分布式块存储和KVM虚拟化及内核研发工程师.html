@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		腾讯招聘分布式块存储和KVM虚拟化及内核研发工程师
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662380&amp;idx=1&amp;sn=28ddfa16f5a6767b26070513797f1cdf&amp;chksm=810f2cf1b678a5e77a19b27fba0b65f5282e5248df4dcf229d436f58da3e92ef60a26113c11f&amp;scene=27#wechat_redirect&cpage=43' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">腾讯招聘分布式块存储和KVM虚拟化及内核研发工程师</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        mws_007
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2017-09-20</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p><span style="color: rgb(61, 167, 66);"></span></p><p><br  /></p><p><span style="color: rgb(61, 167, 66);"><strong>岗位名称：分布式块存储底层开发工程师</strong></span><br  /></p><p>工作职责：</p><p>负责分布式块存储系统及其相关模块设计、研发和运营质量；</p><p>工作要求：</p><ul class=" list-paddingleft-2" style="list-style-type: square;"><li><p>3年以上Linux操作系统下C/C++项目开发经验；</p></li><li><p>熟悉Linux操作系统原理、内核IO栈、ext3文件系统；</p></li><li><p>熟悉分布式系统理论，有分布式存储系统研发设计经验优先；</p></li><li><p>有想法有担当，自信，不轻易说做不到；</p></li><li><p>热情、积极主动，学习能力强，高度的责任心，愿意主动接受挑战；</p></li></ul><p><br  /></p><p><strong><span style="color: rgb(61, 167, 66);">岗位名称：KVM虚拟化及内核研发工程师</span></strong></p><p>工作职责：</p><p>负责Linux内核、虚拟化平台的维护和定制化优化，满足业务发展需求；</p><p>解决在Linux内核、虚拟化平台上遇到的性能和稳定性问题，给相关技术人员提供技术支持、建议等；</p><p>根据业务需要引入开源社区成果，对开源社区反馈研发成果。</p><p>工作要求：</p><ul class=" list-paddingleft-2" style="list-style-type: disc;"><li><p>3年以上Linux内核或QEMU开发经验；</p></li><li><p>熟悉Linux内核，精通内核网络、存储、文件系统、内存、调度器等模块之一；</p></li><li><p>熟悉KVM、Xen或Container虚拟化技术；</p></li><li><p>有想法有担当，自信，不轻易说做不到；</p></li><li><p>热情、积极主动，学习能力强，高度的责任心，愿意主动接受挑战；</p></li></ul><p><br  /></p><p>同时大量招聘存储和虚拟化运维工程师，有意者请砸简历过来：mws_007@163.com</p><p><br  /></p><p><span style="color: rgb(61, 167, 66);"><strong>技术文章 &gt;&gt;&gt;</strong></span></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662347&amp;idx=1&amp;sn=86273543da5e20f21351b29e0db92f79&amp;chksm=810f2cd6b678a5c00ea54f9f43f3fed663e32e960ebbae6613b4058c5fa27900fd98e2b74c5f&amp;scene=21#wechat_redirect" target="_blank">谢宝友：深入理解Linux RCU：从硬件说起之内存屏障</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662319&amp;idx=1&amp;sn=cba4fc128c023b678bb4506b6c7981cc&amp;chksm=810f2cb2b678a5a4654b928d359eedec3456676702450f142cc22d91a2a80bb87584f62e9c5f&amp;scene=21#wechat_redirect" target="_blank">黄伟亮： 探秘Linux的块设备和根</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662283&amp;idx=1&amp;sn=70fd990b2f0af2a8f45e24af37022c0f&amp;chksm=810f2c96b678a58050e6f448eba5ceb3ce39b37e6b2074edd88f9116e47176bda8944d68b448&amp;scene=21#wechat_redirect" target="_blank">郭健： Linux内存逆向映射（reverse mapping）技术的前世今生</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662251&amp;idx=1&amp;sn=4bcec79e340a87fcc589262a51473e40&amp;chksm=810f2f76b678a660dd081dede5cfe54f30377385b7291b9ac8fb6821db2b878808772ae355a7&amp;scene=21#wechat_redirect" target="_blank">魏永明： MiniGUI的涅槃重生之路</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662197&amp;idx=1&amp;sn=8c75937824893e26ae920ed515a15d4c&amp;chksm=810f2f28b678a63eab7c2b889c2a25967ce0f06719692ff6a29bfa0e843c7d49b59e52fefb96&amp;scene=21#wechat_redirect" target="_blank">宋宝华：Linux的任督二脉——进程调度和内存管理</a><br  /></p><p>...</p><p><br  /></p><p style="text-align: center;"><strong><span style="color: rgb(61, 167, 66);">与其相忘于江湖，不如点击二维码关注Linuxer</span></strong></p><p style="text-align: center;"><strong><span style="color: rgb(61, 167, 66);"></span></strong></p><p style="text-align: center;"><img data-s="300,640" data-type="png" src="data:image/PNG;base64,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oqJCRUXlWhUVFbtSUVFRUTk8PGQ4PDxkeN/73scPfvADzp07x5vf/GYuX75MRcWLefe7303Fm970JioqLly4wOOPP87b3/52VK5VUVFRUVFxLRUVFRUVlV1NbHgxX/7yl5nzy1/+kjNnzvDhD3+Ym266iWmauOrSpUss+dCHPsTR0RHD7bffzlve8hZuuOEGXi0TG17Mgw8+yAv97W9/46677uLChQt89atf5apvfOMb/OUvf+H1r389u3riiSf4wx/+wB133MHf//53fvSjH/HUU0/xYp588kk++tGP8otf/IJ7772Xq+655x5++tOfctUXv/hF/vGPf/D444/z6U9/muvSppfyzW9+s2s9/PDDvZRHH320l3LmzJkuXLjQ8Pzzz/eRj3yk4Z577umHP/xhly5d6sc//nHPPfdczzzzTJ/4xCcavv3tb/enP/2pZ555pt/85jdddfbs2e67776ueuCBB/rKV77Sf/7znx566KGGX/3qV33/+9/vYx/7WM8991zDxIaX8rWvfY1rXbhwgZfyr3/9i31V/OQnP+GWW27hqqOjI86fP8+cZ599lmeffZY777yTc+fO8bvf/Y7Tp0/z/PPP84EPfIBvfetbvO51r+PXv/41Fy9epOLs2bPceOONfO973+OGG25gOGDDki996Uvcfffd/Pvf/+aDH/wgL+Wd73wnL8c0Tdx1111cdfLkSZ566iluu+025pw4cYLLly/zyCOP8MlPfpKbbrqJxx57jM9//vO84Q1v4KqLFy/y5JNPcuLECS5fvsxnPvMZDg4OuNbEhiV33303V504cYJbbrmF3/72t8z54x//yK233spLufnmm7leKpcuXeLGG2/k1KlTXOvEiRNcdf/993PmzBluuukmrnrrW9/K6dOnuf/++7n//vt54IEHeNvb3sZV0zRxcHDAC01s2NWdd97J2bNneaH3vOc9LLn33ns5efIkVz3zzDMsOTo64ujoiK9//etcvHiRp59+mkuXLvGOd7yDf/7zn/z85z/n6OiId73rXRweHvLEE0/w8Y9/nMuXL/Pf//6X3//+9yw5YMM+vvCFL/BCFy9e5Oabb+bFnD9/ns997nNc67Of/SzDo48+yrUeeughTp8+zRvf+Ea+853v8PDDD/Pe976X8+fP8+c//5mf/exnfOpTn+LWW2/lvvvu49y5c3z3u9/lwQcf5J577uHpp5/m/e9/P3fccQd//etfeTF2BRvWbGLD2k1sWLv/AwPrAc4hUP43AAAAAElFTkSuQmCC " src="Ass1lsY6bysXtibgWbFuZzL76FhP5Al8HEOMDaKHpl7KXgCsY4yzjSO6RLBzuiaEZ2jWe5DeJSAa1iaJtY0wTRiaEw"  class="" data-ratio="1" data-w="129"  /></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">mws_007</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='https://www.52pojie.cn/' target='_blank'>
+			吾爱破解论坛
+		</a>
+	</div>
+</body>

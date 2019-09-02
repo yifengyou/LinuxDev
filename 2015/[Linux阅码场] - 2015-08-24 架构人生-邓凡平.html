@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		架构人生-邓凡平
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=214669981&amp;idx=1&amp;sn=52110ec63b3d503d8612cd99252eda8b&amp;chksm=13d8dc0024af5516ee2fa18794deea9a2ac8161807929def3114c91095a6273c5da5ac122cf1&amp;scene=27#wechat_redirect&cpage=51' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">架构人生-邓凡平</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        邓凡平
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2015-08-24</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                <div class="rich_media_thumb_wrp" id="media">
+                    
+                                        
+                                    </div>
+                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p style="text-indent:28px"><span style="font-family:宋体">和大部分</span>IT<span style="font-family:宋体">从业者不同的是，我走上</span>IT<span style="font-family:宋体">之路的原因非常偶然，这个偶然就是我从来没想过自己会从事这个行业。六年的</span>IT<span style="font-family:宋体">之路走下来，有教训也有收获。在此，非常感谢《</span>IT<span style="font-family:宋体">架构实录》能给我这样一个机会来和各位一起交流工作和学习心得。</span></p><p style="text-indent:28px"><span style="font-family:宋体">先来看看我的求学经历，这段经历为我后续转型成为软件工程师并站稳脚跟打下了坚实的基础。</span></p><h2><span style="font-family:黑体">求学经历</span></h2><p style="text-indent:28px"><span style="font-family:宋体">我于</span>2000<span style="font-family:宋体">年进入华中科技大学水电系，所学专业是水利水电与自动化。大学期间唯一一次谈得上与软件开发有关的经历就是参加了国家计算机二级考试。不过很惭愧，机考直到第二次才通过。</span></p><p style="text-indent:28px"><span style="font-family:宋体">出于各种各样的原因（有些原因现在觉得很无厘头，例如觉得“水电”这个名字很土），我不太喜欢水电这个专业。但当周围其他那些同样深感“水电没有前途”的同学纷纷报考双学位，中高级程序员，甚至转系到软件学院时，我却没有偏科厌学。</span></p><p style="text-indent:28px"><span style="font-family:宋体">假如当初选择去软件学院，现在的我会是什么情况呢？可惜甚或幸运得是历史没有假设。临毕业之际，我放弃了水电系直博的指标，决心通过考研来换一个专业。当时选择了中科院电工所作为目标，但想报考的电力电子专业却没考上，最后成为超导磁体组的一员。虽然这一次专业转换的尝试并没有成功，但也有几个好处，首先是来到了京城。另外一个有意思的好处就是由于中科院和教育部平级，它不参加所谓的大学排名，所以我们终于摆脱了学校名次高低之争的烦恼。</span></p><p style="text-indent:28px"><span style="font-family:宋体">研究生三年的学制中，第一年修学分，后两年回到各个研究所跟着导师搞科研。第一年选课很自由，导师一般不干涉，所以这一阶段的任务就是上课和考试。而第二年回培养单位后，情况就大不同了。名义上是学生，但管理方式却是按照工作人员来要求。不用上课，没有考试。导师只给一个研究方向，其余都是靠自己去学习。</span></p><p style="text-indent:28px"><span style="font-family:宋体">研究生三年是我在“做事、做学问”这两方面得到极大锻炼的三年。</span></p><p style="text-indent:28px"><span style="font-family:宋体">首先，多次专业转换（从水电到研一自由选课，再到回所后学习低温技术、超导磁体技术）逼迫我不得不掌握一种快速学习新知识的能力。大多数人抛弃熟悉的东西，转向完全陌生的领域都会比较痛苦。但学生的压力毕竟比职场人要小，而且获得的帮助也比较多。</span></p><p style="text-indent:28px"><span style="font-family:宋体">第二，提前走出象牙塔并进入社会。</span><span style="font-family:宋体">回所后最初的几个月我渡过了一段比较痛苦和郁闷的时间。郁闷的原因其实很简单，在所里做科研，其实就是上班，相当于走向了社会。</span><span style="font-family:宋体">做学生和干工作所面对的挑战完全不同。例如，做学生时，仅需要每天按时上课，完成作业，然后考试即可。整个过程目标单一（及格，或者考一个高分），评价体系单一（分数是唯一评价体系），达到目标的所采取的手段也很单一（完成作业，记住概念，掌握相关知识即可）。而工作则完全不同：首先是目标不确定，即搞科研不知道要搞到什么程度才算完，评价体系多样（在科研过程中，任何一些做得好的地方都可以成为亮点，而对最终结果的评价也是综合性得）。另外，职场人另一个显著特点就是一个人负责一块，能获得的外界帮助较少，所以只能靠自己去努力才能担当起来。</span></p><p style="text-indent:28px"><span style="font-family:宋体">所以，当我掌握了学习方法，适应了职场人角色，并能积极主动去完成目标后，研究生的最后一年就得以完成一件意义深远的工作，这就是撰写了我人生第一本专著。其来源也比较偶然。</span></p><p style="text-indent:28px"><span style="font-family:宋体">当时我看到一个有限元分析软件</span>Ansys<span style="font-family:宋体">挺有意思，就打算靠学会它以后好找份工作。在学习</span>Ansys<span style="font-family:宋体">过程中，发现国内基本上没有什么</span>Ansys<span style="font-family:宋体">方面的好书，就想着能否自己写一本呢？刚好有个同学在外面做兼职，认识文化公司的人。我一跑去问，结果他们还真想出一本</span>Ansys<span style="font-family:宋体">的书。于是乎，我的第一本书籍《</span>ANSYS10.0<span style="font-family:宋体">有限元分析自学手册》就在</span>2007<span style="font-family:宋体">年元旦时面世了。谁也没想到，这本书直到现在都是</span>ANSYS<span style="font-family:宋体">入门书中最好的一本，累计印刷十几次。</span></p><p style="text-indent:28px"><span style="font-family:宋体">硕士毕业之际，北京极少有和超导磁体专业对口的工作，后来机缘巧合得到一个机会能加入中科大洋。我去面试的时候，当时大洋的领导问我：是想搞软件还是搞硬件？我想了半天，觉得研一还学过</span>VHDL<span style="font-family:宋体">（一门硬件电路设计语言），就想去硬件部门。领导介绍说大洋的核心部门是软件，我就说那就做软件吧。就这样，我进入了软件行业。</span></p><h2>IT<span style="font-family:黑体">从业之路</span></h2><p style="text-indent:28px"><span style="font-family:宋体">在正式工作前我仔细分析了自己的劣势和优势：</span></p><p style="text-indent:0in"><span style="font-family:Wingdings">q<span style="font-stretch: normal;font-size: 9px">   </span></span><span style="font-family:宋体">劣势很明显，就是缺乏软件开发技能。</span></p><p style="text-indent:0in"><span style="font-family:Wingdings">q<span style="font-stretch: normal;font-size: 9px">   </span></span><span style="font-family:宋体">优势就是有一套被实践检验过的行之有效的学习方法。除此之外，我还暗暗鼓励自己，我不一定能是大洋最好的程序员，但也绝不能是最差的一个。</span></p><p style="text-indent:28px"><span style="font-family:宋体">作为一个软件开发的新手，压力可想而知有多大了。是压力，但更是机遇。幸好大洋是国内技术实力非常雄厚的公司，而且研发部工作气氛很好。那三年我很努力（没熬过夜，但是每天回家都读书、学习、做笔记），因为我知道自己属于零基础入门（从另外一个角度来看，这同时也是件好事，因为心中没有任何条条框框，很多东西都想去尝试）。在这样的环境下，我的技术水平在这三年中提升非常快，很快就成为公司的核心开发人员了。另外，大概一年半的时候，项目组的几个前辈跳槽，结果，开发重任只能放到我们这些小辈身上。这段时间技术成长非常快。我回想对这段经历，感触很深，一定要给新人机会正是这个道理。所以，现在在工作过程中，我也特别注意把机会给新人，帮助他们成长。</span></p><p style="text-indent:28px"><span style="font-family:宋体">第二年末，我被开发组长提拔为开发副组长。后来他告诉我原因说，”从技术上看，组里还有更强的，但是从工作态度上说，你比其他人都积极主动“。其实，这种积极主动并非性格使然，而是我刚进入大洋时，考虑到自己是零基础入行，所以对自己订下了一项要求：因技术差而让人嘲笑无所谓，但不能被人指摘工作态度。谁想慢慢得，这项自我要求就转变成一种习惯了。</span></p><p style="text-indent:28px"><span style="font-family:宋体">在大洋工作三年合同期满后，我跳槽到中科创达。原因很简单，因为它做手机、平板等这些我个人比较感兴趣、看起来很酷的东西。当</span>Android<span style="font-family:宋体">刚出来不久，中科创达就投入了几乎全部力量到这个平台中。为了配合公司的发展方向，当时我就想着一定要把</span>Android<span style="font-family:宋体">中那些不会的东西都学会。大家都知道</span>“<span style="font-family:宋体">好记性不如烂笔头</span>”<span style="font-family:宋体">这句话，在学习过程中，我就把自己的学习心得记录下来。再加上工作中又需要这些知识，二者相互促进，使得自己在</span>Android<span style="font-family:宋体">这块有机会、有动力去学习和积累。</span></p><p style="text-indent:28px"><span style="font-family:宋体">由于之前有过写书的经历，所以当华章公司的杨福川编辑邀请我出书的时候，我没有丝毫犹豫。写书对一个人的挑战非常大，尤其是在技术层面和语言表达层面。自己学懂一门技术还得让其他人也学会，这个难度显然不小。另外，如何平衡写书所需要的时间以及工作和生活也是一项巨大的挑战。我个人在《深入理解</span>Android<span style="font-family:宋体">》卷</span>1<span style="font-family:宋体">和卷</span>2<span style="font-family:宋体">两本书的撰写的过程中，没有一天熬过夜。</span></p><p style="text-indent:28px"><span style="font-family:宋体">当写完《深入理解</span>Android <span style="font-family:宋体">卷</span>2<span style="font-family:宋体">》一书后，我渐渐感觉到在一个公司里，仅靠一个人或少数几个人单打独斗很难有较大作为。恰巧此时</span>Tieto<span style="font-family:宋体">公司给了我一个高级架构师的工作岗位，使得我能和</span>Tieto<span style="font-family:宋体">的</span>Android<span style="font-family:宋体">团队一起努力和成长。</span></p><p style="text-indent:28px"><span style="font-family:宋体">一个良好开放的工作氛围，再加上优秀和辛勤的员工，整个</span>Tieto Android<span style="font-family:宋体">团队在近一年的时间里中所取得的成果非常多，我们不仅赢得了公司国外</span>site<span style="font-family:宋体">同事的认可，甚至连一向挑剔的客户都不得不承认我们的实力。而我则在去</span>Tieto<span style="font-family:宋体">仅三个多月后，就被评为当年的优秀员工。</span></p><p style="text-indent:28px"><span style="font-family:宋体">和一些前辈比起来，六年的</span>IT<span style="font-family:宋体">从业经验还相当短，不过也有一些心得，希望能引起读者的共鸣。</span></p><h2><span style="font-family:黑体">心得</span></h2><p style="text-indent:28px"><span style="font-family:宋体">对职场人士来说，最重要的一种能力就是学习能力了。而我在经历多次专业转换的折磨后，总结了一套相对有效的学习方法。</span></p><p style="text-indent:28px"><span style="font-family:宋体">我的学习方法是以点带面，建立自己的知识结构。例如，工作中，往往只需要集中全力解决一点或几点问题就可以了。但这些点背后一定有一个较完整和深入的知识结构。所以，工作做完后，还需要继续学习背后的知识结构。以多核并行开发为例，</span>09<span style="font-family:宋体">年做了一个</span>FTP<span style="font-family:宋体">服务器，用到了多线程网络开发的技术，工作内容很快就定型了。但我觉得多核并行开发是一门新兴的技术，而我不想停留在仅会熟练使用多线程</span>API<span style="font-family:宋体">这种程度，所以后续还花了不少时间去研读多核并行方面的专著。所以，我觉得不管读者是在开发自己的产品也好，还是在修改</span>bug<span style="font-family:宋体">也好，一定要努力从工作中提炼、积累出一个完整的知识框架。</span></p><p style="text-indent:28px"><span style="font-family:宋体">另外，对于</span>IT<span style="font-family:宋体">职场新人，我有一个建议，即工作前</span>3<span style="font-family:宋体">年求知识的广度。头三年对任何一个职场新人来说都很重要，所以要抛开语言之见（例如</span>C/C++<span style="font-family:宋体">孰优孰劣）、平台之见（</span>Linux<span style="font-family:宋体">好还是</span>windows<span style="font-family:宋体">好）。大家只要抱着一个问题来学习。即，这项知识你都清楚吗？不清楚就去学，而不要把其他观点牵扯进来。三年之后可以根据自己的兴趣爱好选择一个合适的平台进行深耕细作。这个阶段求深度，并保持一定的广度。在这里，深度和广度并不矛盾，二者是相辅相成，互相促进的关系。</span></p><p style="text-indent:28px"><span style="font-family:宋体">随着个人技术能力的不断提升，公司或上级领导自然就会给予个人更大的责任，这个时候我们就需要培养团队管理的意识。那么我们该如何组建和管理一个团队呢？</span></p><p style="text-indent:28px"><span style="font-family:宋体">在最近一年的历练中，我觉得此问题的解答一定要结合环境和团队成员的情况。从</span>Tieto<span style="font-family:宋体">公司来说，大家为之努力的就是要组建一个学习型团队。团队成员的技术素养很好，氛围也很民主和开放。另外，我们都有一种对知识追求的愿望（求知欲应该是人类都具有的原始且长久的冲动）。刚好学习型组织的核心理念也包括这些东西。具体的管理手段有很多，比如时间管理、敏捷开发等。这些方法都有很多资料可以参考。不过大家一定要结合实际情况来因地制宜。</span></p><p style="text-indent:28px"><span style="font-family:宋体">另外，我个人很赞同联想柳总关于团队管理的一句话，即”定调子，搭班子，带队伍“，在实践过程中，我也常常以这个方针为指导来协调和管理整个团队。</span></p><h2><span style="font-family:黑体">结尾</span></h2><p style="text-indent:28px"><span style="font-family:宋体">写下这篇短文之时，我刚迈入自己</span>IT<span style="font-family:宋体">之路的第六个年头。回想这六年经历，非常庆幸当初是零基础入行，这份压力使得我直到今天还保持着强烈的求知欲和危机感。我常想，今天我能做的事情，其他人总有一天也能做到，那么我该何去何从呢？为了能跟上</span>IT<span style="font-family:宋体">行业快速发展的步伐，古语所言的“活到老，学到老”和乔布斯的“</span>Stay foolish, Stay hungry<span style="font-family:宋体">”或许能做为我们职场征途中的灯塔。</span></p><p style="text-indent:28px"><span style="font-family:宋体">杨澜有一句话，“原来我只佩服成功的人，现在我更尊敬那些正在努力的人”，如果我们还未成功，那就努力成为受尊敬的人吧。</span></p><p style="text-indent:28px"></p><p><br  /></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">邓凡平</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='https://www.52pojie.cn/' target='_blank'>
+			吾爱破解论坛
+		</a>
+	</div>
+</body>

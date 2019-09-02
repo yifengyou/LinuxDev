@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		The precise meaning of I-O wait time in Linux
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662748&amp;idx=1&amp;sn=f239eb01ff27d805dd73f50032b4d454&amp;chksm=810f2d41b678a4577651973297a19c2a53251adf52f27b2a4459cb5a0755be3057170aec6f65&amp;scene=27#wechat_redirect&cpage=39' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">The precise meaning of I/O wait time in Linux</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        Andreas Veithen
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2017-11-24</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(249, 110, 87);padding: 10px;box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="box-sizing: border-box;"><p style="box-sizing: border-box;">这篇文章非常清楚介绍了top里面看到的iowait的含义，值得一读。本文系转发：Andreas Veithen的博客：http://veithen.github.io/2013/11/18/iowait-linux.html</p><p style="box-sizing: border-box;text-align: center;"><strong><span style="color: rgb(0, 209, 0);">欢迎关注Linuxer</span></strong></p><p style="box-sizing: border-box;text-align: center;"><strong><span style="color: rgb(0, 209, 0);"></span></strong></p><p style="text-align: center;"><img data-type="gif" src="data:image/JPG;base64,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 " src="Ass1lsY6byuuP1cF7kbteL0anJicn26b6BOP1u6v3HEIxMEgcq7dvOJKRF9AicGjQIIDKXbszXBu2MNSWLLMCagA"  data-copyright="0" style="" class="" data-ratio="1" data-w="129"  /></p></section></section></section></section></section></section></section><p style="">Some time ago I had a discussion with some systems guys about the exact meaning of the I/O wait time which is displayed by&nbsp;<code style="">top</code>&nbsp;as a percentage of total CPU time. Their answer was that it is the time spent by the CPU(s) while waiting for outstanding I/O operations to complete. Indeed, the man page for the&nbsp;<code style="">top</code>&nbsp;command defines this as the “time waiting for I/O completion”.</p><p style="">However, this definition is obviously not correct (or at least not complete), because a CPU never spends clock cycles waiting for an I/O operation to complete. Instead, if a task running on a given CPU blocks on a synchronous I/O operation, the kernel will suspend that task and allow other tasks to be scheduled on that CPU.</p><p style="">So what is the exact definition then? There is an interesting&nbsp;Server Fault question&nbsp;that discussed this. Somebody came up with the following definition that describes I/O wait time as a sub-category of idle time:</p><blockquote style=""><p style="box-sizing: border-box;">iowait is time that the processor/processors are waiting (i.e. is in an idle state and does nothing), during which there in fact was outstanding disk I/O requests.</p></blockquote><p style="">That makes perfect sense for uniprocessor systems, but there is still a problem with that definition when applied to multiprocessor systems. In fact, “idle” is a state of a CPU, while “waiting for I/O completion” is a state of a task. However, as pointed out earlier, a task waiting for outstanding I/O operations is not running on any CPU. So how can the I/O wait time be accounted for on a per-CPU basis?</p><p style="">For example, let’s assume that on an otherwise idle system with 4 CPUs, a single, completely I/O bound task is running. Will the overall I/O wait time be 100% or 25%? I.e. will the I/O wait time be 100% on a single CPU (and 0% on the others), or on all 4 CPUs? This can be easily checked by doing a simple experiment. One can simulate an I/O bound process using the following command, which will simply read data from the hard disk as fast as it can:</p><pre style=""><code style="">dd if=/dev/sda of=/dev/null bs=1MB</code></pre><p style="">Note that you need to execute this as&nbsp;<code style="">root</code>&nbsp;and if necessary change the input file to the appropriate block device for your hard disk.</p><p style="">Looking at the CPU stats in&nbsp;<code style="">top</code>&nbsp;(press&nbsp;<code style="">1</code>&nbsp;to get per-CPU statistics), you should see something like this:</p><pre style=""><code style="">%Cpu0 &nbsp;: &nbsp;3,1 us, 10,7 sy, &nbsp;0,0 ni, &nbsp;3,5 id, 82,4 wa, &nbsp;0,0 hi, &nbsp;0,3 si, &nbsp;0,0 st
+%Cpu1 &nbsp;: &nbsp;3,6 us, &nbsp;2,0 sy, &nbsp;0,0 ni, 90,7 id, &nbsp;3,3 wa, &nbsp;0,0 hi, &nbsp;0,3 si, &nbsp;0,0 st
+%Cpu2 &nbsp;: &nbsp;1,0 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 96,3 id, &nbsp;2,3 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st
+%Cpu3 &nbsp;: &nbsp;3,0 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 96,3 id, &nbsp;0,3 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st</code></pre><p style="">This output indicates that a single I/O bound task only increases the I/O wait time on a single CPU. Note that you may see that occasionally the task “switches” from one CPU to another. That is because the Linux kernel tries to schedule a task on the CPU it ran last (in order to improve CPU cache hit rates), but this is not always possible and the task is moved on another CPU. On some systems, this may occur so frequently that the I/O wait time appears to be distributed over multiple CPUs, as in the following example:</p><pre style=""><code style="">%Cpu0 &nbsp;: &nbsp;5.7 us, &nbsp;5.7 sy, &nbsp;0.0 ni, 50.5 id, 34.8 wa, &nbsp;3.3 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu1 &nbsp;: &nbsp;3.0 us, &nbsp;3.3 sy, &nbsp;0.0 ni, 72.5 id, 20.9 wa, &nbsp;0.3 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu2 &nbsp;: &nbsp;7.0 us, &nbsp;4.3 sy, &nbsp;0.0 ni, 62.0 id, 26.7 wa, &nbsp;0.0 hi, &nbsp;0.0 si, &nbsp;0.0 st
+%Cpu3 &nbsp;: &nbsp;4.3 us, &nbsp;2.3 sy, &nbsp;0.0 ni, 89.6 id, &nbsp;3.7 wa, &nbsp;0.0 hi, &nbsp;0.0 si, &nbsp;0.0 st</code></pre><p style="">Nevertheless, assuming that&nbsp;<code style="">dd</code>&nbsp;is the only task doing I/O on the system, there can be at most one CPU in state I/O wait at any given point in time. Indeed, 34.8+20.9+26.7+3.7=86.1 which is close to but lower than 100.</p><p style="">To make the experiment more reproducible, we can use the&nbsp;<code style="">taskset</code>&nbsp;command to “pin” a process to a given CPU (Note that the first command line argument is not the CPU number, but a mask):</p><pre style=""><code style="">taskset 1 dd if=/dev/sda of=/dev/null bs=1MB</code></pre><p style="">Another interesting experiment is to run a CPU bound task at the same time on the same CPU:</p><pre style=""><code style="">taskset 1 sh -c "while true; do true; done"</code></pre><p style="">The I/O wait time now drops to 0 on that CPU (and also remains 0 on the other CPUs), while user and system time account for 100% CPU usage:</p><pre style=""><code style="">%Cpu0 &nbsp;: 80,3 us, 15,5 sy, &nbsp;0,0 ni, &nbsp;0,0 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;4,3 si, &nbsp;0,0 st
+%Cpu1 &nbsp;: &nbsp;4,7 us, &nbsp;3,4 sy, &nbsp;0,0 ni, 91,3 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,7 si, &nbsp;0,0 st
+%Cpu2 &nbsp;: &nbsp;2,3 us, &nbsp;0,3 sy, &nbsp;0,0 ni, 97,3 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st
+%Cpu3 &nbsp;: &nbsp;2,7 us, &nbsp;4,3 sy, &nbsp;0,0 ni, 93,0 id, &nbsp;0,0 wa, &nbsp;0,0 hi, &nbsp;0,0 si, &nbsp;0,0 st</code></pre><p style="">That is expected because I/O wait time is a sub-category of idle time, and the CPU to which we pinned both tasks is never idle.</p><p style="">These findings allow us to deduce the exact definition of I/O wait time:</p><p style=""><em style="box-sizing: border-box;">For a given CPU, the I/O wait time is the time during which that CPU was idle (i.e. didn’t execute any tasks) and there was at least one outstanding disk I/O operation requested by a task scheduled on that CPU (at the time it generated that I/O request).</em></p><p style="">Note that the nuance is not innocent and has practical consequences. For example, on a system with many CPUs, even if there is a problem with I/O performance, the observed overall I/O wait time may still be small if the problem only affects a single task. It also means that while it is generally correct to say that faster CPUs tend to increase I/O wait time (simply because a faster CPU tends to be idle more often), that statement is no longer true if one replaces “faster” by “more”.</p><p><br  /></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">Andreas Veithen</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='http://veithen.github.io/2013/11/18/iowait-linux.html' target='_blank'>
+			阅读全文
+		</a>
+	</div>
+</body>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		linux内核对伙伴系统的改进--migrate_type
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652663982&amp;idx=2&amp;sn=a5f3edc2a2c3b4b12a07d7ec8743a4cd&amp;chksm=810f3633b678bf250e4018e075c9f9882df1073b5d6b0a4e59aa3cd2d45b062e12df97106be1&amp;scene=27#wechat_redirect&cpage=29' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">linux内核对伙伴系统的改进--migrate_type</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        dog250
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2018-03-29</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p class="copyright_p"><span style="color: rgb(0, 209, 0);">来源于：https://blog.csdn.net/dog250/article/details/6108028</span></p><p class="copyright_p"><span style="color: rgb(0, 209, 0);">版权声明：本文为博主原创，无版权，未经博主允许可以随意转载，无需注明出处，随意修改或保持可作为原创！&nbsp;&nbsp;</span></p><p class="copyright_p"><br  /></p><p>linux底层使用伙伴系统-buddy管理物理内存，buddy可以被证明是一种很有效的内存管理方式，但是它也拥有很多缺点，其中碎片避免的不完备性--仅仅寄托于释放时的合并操作而不考虑分配时的策略，这也许是它最大的不足，linux2.6内核的后期版本对这个问题进行了改进，大大避免了碎片的泛滥。在linux中，buddy是通过下列数据结构表示的(2.6的早期内核): <br  />struct free_area {<br  />&nbsp;&nbsp;&nbsp; struct list_head&nbsp;&nbsp;&nbsp; free_list;<br  />&nbsp;&nbsp;&nbsp; unsigned long&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; *map;<br  />};<br  />系统中10个free_area组成一个数组，每一个free_area包含一个链表，每一个链表上链接有空闲内存页面块。后来引入了MIGRATE_TYPE，于是free_area结构体就成了：<br  />struct free_area {<br  />&nbsp;&nbsp;&nbsp; struct list_head&nbsp;&nbsp;&nbsp; free_list[MIGRATE_TYPES];<br  />&nbsp;&nbsp;&nbsp; unsigned long&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; nr_free;<br  />};<br  />每一个free_area包含多个链表，其中每一个链表中的内存页面按照其自身是否可以释放或者迁移被归为一类，于是凡是请求“不可迁移”页面的分配请求全部在free_list[MIGRATE_UNMOVABLE]这条链表上分配，和老版本一样，系统中有10个free_area代表大小为2的N次幂个不同页面的集合。这种归类可以最小化内存碎片。<br  />&nbsp;&nbsp;&nbsp;&nbsp; buddy系统本身就有效的防止了碎片，然而还不够。<br  />buddy主要体现在：1.互为buddy的页面块不可能共存于一个free_area链表，它们总是倾向于合并；2.一个free_area的链表中的页面order相同，但是它们肯定彼此不互为buddy，这些页面用于该order大小需求的页面分配。但是buddy的碎片防止机制寄托于内存使用者会及时释放掉内存的情况，如果使用者长期不释放内存，或者说在使用者还没有释放内存的这一段时间期间，碎片将是存在的，并且可能还会导致很大的问题，比如在物理内存中间分配了一页面，然而仅因为分配的这一个页面不可移动，在它被释放之前，系统可用的最大的连续物理内存就只有不到一半物理内存总大小了。究其根源，这种问题的根源在于buddy系统仅仅释放页面时的合并操作防止了碎片的产生，不管页面从哪里被分配，只要它能有效被释放，碎片就是可以避免的，也就是说，buddy系统对于分配并没有更多的约束，仅仅满足在10个free_area中从小到大的顺序扫描即可。<br  />&nbsp;&nbsp;&nbsp;&nbsp; 既然找到了buddy的问题，那么只要对分配动作采取一定的约束，碎片就可以进一步避免了。</p><p><mpcpc js_editor_cpcad="" class="js_cpc_area res_iframe cpc_iframe" data-category_id_list="48|41" src="/cgi-bin/readtemplate?t=tmpl/cpc_tmpl"></mpcpc>最简单而又不引入过多复杂性的办法就是将页面按照“可移动”属性分类，将不可移动的页面分为一类，将可以移动的页面分为一类，它们各自占据一块足够大的连续物理空间，不可移动的页面分配需求则尽量在它自己的页面类中分配，可移动的页面也一样，这样一来，不可移动的页面的不可移动性仅仅影响它自身的类别而不会导致一个不可移动的页面两边都是可移动的页面。这就是MIGRATE_TYPE被引入的目的。MIGRATE_TYPE限制了内存页面的分配地点从而避免碎片，而不再仅仅寄希望于它们被释放时通过合并避免碎片。<br  />&nbsp;&nbsp;&nbsp;&nbsp; 
+可以说MIGRATE_TYPE仅仅是一种防止碎片的策略，不应该因为它的存在而影响到内存分配的结果，也就是说，如果在一个MIGRATE_TYPE链表中没有内存可以分配了，那么也还是可以从别的链表中“暂时抢”一些的。另外，还有一个问题，内核载初始化的时候如何为“不可移动类”或者“可移动类”页面指定初始大小呢？也就是说，一开始，系统的free_area中的这些类别链表的页面各该是多少个呢？事实上，内核从来没有指定过初始大小，而是一开始将所有页面都归到“可移动”组当中，而别的组全部都是空的，等到真的有不可移动页面需求的时候再从可移动组中拨一批给不可移动组链表，想一下这也是合理的，毕竟只是一些“不可移动”的页面造成了内存的长期碎片化，如果没有这些长期使用的不可移动页面，碎片的问题是不大的。这个从__rmqueue_fallback函数中可以看出，系统的内存子系统拥有一个fallbacks序列，该序列展示了一个分配序列，也就是如果一个migratetype链表中如果分配不到内存的话，下一个应该在哪个migratetype链表中分配。从__rmqueue_fallback可以看出，如果从要求的migratetype空闲链表中分配不到内存的话，并不是在根据fallbacks序列在“下一个”链表中仅仅分配到自己本次所需的就完事了，而是一次性从fallbacks序列中指示的链表中转移足够多的页面到分配时要求的migratetype链表，毕竟该种类型的空闲链表已经没有页面了，确实需要补充了，并且如果补充的页面太少，那么就会给转移的源migratetype类型组造成碎片，只有一次性分配一大块内存，才不至于引入碎片。</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="box-sizing: border-box;"><p style="box-sizing: border-box;"><span style="font-size: 10px;box-sizing: border-box;">static struct page *__rmqueue_fallback(struct zone *zone, int order,<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; int start_migratetype)<br style="box-sizing: border-box;"  />{<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; struct free_area * area;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; int current_order;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; struct page *page;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; int migratetype, i;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; //尽量一次性拨出尽可能多的内存页面给“该”migratetype的free_area链表<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; for (current_order = MAX_ORDER-1; current_order &gt;= order; --current_order) {<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; for (i = 0; i &lt; MIGRATE_TYPES - 1; i++) {<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; migratetype = fallbacks[start_migratetype][i];<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; if (migratetype == MIGRATE_RESERVE)&nbsp; //不允许占用保留内存<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; continue;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; area = &amp;(zone-&gt;free_area[current_order]);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; if (list_empty(&amp;area-&gt;free_list[migratetype]))<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; continue;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; page = list_entry(area-&gt;free_list[migratetype].next, struct page, lru);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; area-&gt;nr_free--;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ...<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; list_del(&amp;page-&gt;lru);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; rmv_page_order(page);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; __mod_zone_page_state(zone, NR_FREE_PAGES, -(1UL &lt;&lt; order));<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; if (current_order == pageblock_order)<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; set_pageblock_migratetype(page,&nbsp;&nbsp;&nbsp; start_migratetype);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; //将除去本次自己要用的page[order]之外的其它页面全部补充进该area的migratetype空闲链表<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; expand(zone, page, order, current_order, area, migratetype);<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; return page;<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; }<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; }<br style="box-sizing: border-box;"  />&nbsp;&nbsp;&nbsp; return __rmqueue_smallest(zone, order, MIGRATE_RESERVE);<br style="box-sizing: border-box;"  />}</span></p></section></section></section></section></section></section></section><p>另外，还有一种类似的机制用于避免碎片，那就是使用ZONE的概念，新构造出一个虚拟的ZONE--ZONE_MOVABLE，所谓的虚拟就是它并不和任何物理内存区间相关联，而是可以附着在任何的物理zone上，用户可以通过命令行参数指定用于“可移动”或者“不可移动”的内存的大小，从而也就规定了虚拟的ZONE_MOVABLE的大小。一般的最终比较高的物理内存区域用于可移动的虚拟zone(ZONE_MOVABLE)分配，这是因为低地址内存更多的用于dma或者isa或者内核数据结构(一一线性映射)等，而高内存则一般用于用户进程(可以交换到交换空间...)</p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">dog250</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='https://blog.csdn.net/dog250/article/details/6108028' target='_blank'>
+			阅读全文
+		</a>
+	</div>
+</body>

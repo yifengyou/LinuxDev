@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		Linux下误删除后的恢复操作（ext3-ext4）
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652663894&amp;idx=1&amp;sn=8c64cc0700f4144e44c603c77ba28d33&amp;chksm=810f36cbb678bfdd71f5f14e43d0c6c6acc79df260c9fbedf27b5cedc857d666d69db587417b&amp;scene=27#wechat_redirect&cpage=29' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">Linux下误删除后的恢复操作（ext3/ext4）</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        kevingrace
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2018-03-20</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p><span style="word-wrap: break-word;color: rgb(102, 102, 102);font-family: 宋体, Arial;font-size: 14px;background-color: rgb(255, 255, 255);line-height: 2;"></span></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(249, 110, 87);padding: 10px;box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="box-sizing: border-box;"><p style="box-sizing: border-box;">本文转发自：http://www.cnblogs.com/kevingrace/p/6145308.html</p></section></section></section></section></section></section></section><p><span style="word-wrap: break-word;color: rgb(102, 102, 102);font-family: 宋体, Arial;font-size: 14px;background-color: rgb(255, 255, 255);line-height: 2;"></span></p><p>Linux是作为一个多用户、多任务的操作系统，文件一旦被删除是难以恢复的。尽管删除命令只是在文件节点中作删除标记，并不真正清除文件内容，但是其他用户和一些有写盘动作的进程会很快覆盖这些数据。在日常工程中，谁也说不准永远不犯错误，万一哪天不小心误操作删除了一些重要文件，该怎么办呢？？<br  />莫慌！这里介绍<span style="color: rgb(51, 51, 153);">一款神器extundelete，这是<span style="color: rgb(255, 0, 0);"><strong>针对ext4文件格式</strong></span>下文件删除后的恢复工具</span>，十分强大！！</p><p>废话不多说，下面开始介绍这款神器的使用：<br  /><span style="background-color: rgb(204, 153, 255);">1）下载并安装软件</span><br  />extundelete主页：http://extundelete.sourceforge.net/<br  />下载地址：<span style="font-size: 12px;">http://nchc.dl.sourceforge.net/project/extundelete/extundelete/0.2.0/extundelete-0.2.0.tar.bz2</span><br  /></p><p><span style="color: rgb(0, 0, 255);">下载到本机的/usr/local/src目录下</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# cd /usr/local/src<br  />[root@slave-node src]# tar -jvxf extundelete-0.2.0.tar.bz2 <br  />[root@slave-node src]# cd extundelete-0.2.0<br  />[root@slave-node extundelete-0.2.0]# yum -y install e2fsprogs* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(0, 128, 0);">&nbsp;//不然会提示找不到ext2fs库</span><br  />[root@slave-node extundelete-0.2.0]# ./configure<br  />[root@slave-node extundelete-0.2.0]# make &amp;&amp; make install</span></p><p><span style="color: rgb(0, 0, 255);">2)执行删除操作（要是/根分区之外的分区，并且只能是文件删除后的恢复，目录删除不能恢复）</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# df -T</span><br  /><span style="font-size: 12px;">Filesystem &nbsp; &nbsp; Type &nbsp;1K-blocks &nbsp; &nbsp;Used Available Use% Mounted on<br  />/dev/sda3 &nbsp; &nbsp; &nbsp;ext4 &nbsp;151189708 2370020 141139688 &nbsp; 2% /<br  />tmpfs &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tmpfs &nbsp;32960412 &nbsp; &nbsp; &nbsp; 0 &nbsp;32960412 &nbsp; 0% /dev/shm<br  />/dev/sda1 &nbsp; &nbsp; &nbsp;ext4 &nbsp; &nbsp; 198337 &nbsp; 26798 &nbsp; &nbsp;161299 &nbsp;15% /boot<br  />/dev/sda2 &nbsp; &nbsp; &nbsp;<span style="color: rgb(255, 0, 0);">ext4</span> &nbsp;806346400 &nbsp;201304 765185096 &nbsp; 1% /home</span></p><p><span style="font-size: 12px;">[root@slave-node ~]# cd /home/<br  />[root@slave-node home]# echo "123456"&gt; test1<br  />[root@slave-node home]# echo "hahahahha" &gt; wangshibo<br  />[root@slave-node home]# ls<br  />lost+found &nbsp;test1 &nbsp;wangshibo &nbsp;zabbix</span></p><p><span style="font-size: 12px;"><span style="font-size: 12px;color: rgb(153, 51, 0);">删除文件</span><br  />[root@slave-node home]# rm -rf test1 wangshibo <br  />[root@slave-node home]# ls<br  />lost+found &nbsp;zabbix</span></p><p><span style="color: rgb(0, 0, 255);">3）数据删除后的恢复操作</span><br  /><span style="color: rgb(128, 0, 128);">首先恢复前，卸载需要恢复文件的分区</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# umount /home/ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(0, 128, 0);">//如果卸载失败，就用命令"fuser -k /home"结束使用此分区的进程树</span><br  />[root@slave-node ~]# df -T<br  />Filesystem &nbsp; &nbsp; Type &nbsp;1K-blocks &nbsp; &nbsp;Used Available Use% Mounted on<br  />/dev/sda3 &nbsp; &nbsp; &nbsp;ext4 &nbsp;151189708 2370024 141139684 &nbsp; 2% /<br  />tmpfs &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tmpfs &nbsp;32960412 &nbsp; &nbsp; &nbsp; 0 &nbsp;32960412 &nbsp; 0% /dev/shm<br  />/dev/sda1 &nbsp; &nbsp; &nbsp;ext4 &nbsp; &nbsp; 198337 &nbsp; 26798 &nbsp; &nbsp;161299 &nbsp;15% /boot</span></p><p><span style="color: rgb(128, 0, 128);">使用extundelete查看分区上存在的文件,如下：</span><br  /><span style="color: rgb(255, 102, 0);">--inode 为查找某i节点中的内容，使用2则说明为搜索，如果需要进入目录搜索，只须要指定目录I节点即可</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# <span style="color: rgb(255, 0, 0);">extundelete --inode 2 /dev/sda2</span><br  />WARNING: Extended attributes are not restored.<br  />Loading filesystem metadata ... 6250 groups loaded.<br  />Contents of inode 2:<br  />0000 | ed 41 00 00 00 10 00 00 84 10 49 58 82 10 49 58 | .A........IX..IX<br  />0010 | 82 10 49 58 00 00 00 00 00 00 04 00 08 00 00 00 | ..IX............<br  />0020 | 00 00 00 00 07 00 00 00 21 24 00 00 00 00 00 00 | ........!$......<br  />0030 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />0040 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />0050 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />0060 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />0070 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />0080 | 00 00 00 00 00 00 00 00 11 10 00 00 00 00 00 00 | ................<br  />0090 | 00 00 00 00 00 00 00 00 62 0e 49 58 62 0e 49 58 | ........b.IXb.IX<br  />00a0 | 62 0e 49 58 00 00 00 00 00 00 00 00 00 00 00 00 | b.IX............<br  />00b0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />00c0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />00d0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />00e0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................<br  />00f0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................</span></p><p><span style="font-size: 12px;">Inode is Allocated<br  />Group: 0<br  />File mode: 16877<br  />Low 16 bits of Owner Uid: 0<br  />Size in bytes: 4096<br  />Access time: 1481183364<br  />Creation time: 1481183362<br  />Modification time: 1481183362<br  />Deletion Time: 0<br  />Low 16 bits of Group Id: 0<br  />Links count: 4<br  />Blocks count: 8<br  />File flags: 0<br  />File version (for NFS): 0<br  />File ACL: 0<br  />Directory ACL: 0<br  />Fragment address: 0<br  />Direct blocks: 9249, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0<br  />Indirect block: 0<br  />Double indirect block: 0<br  />Triple indirect block: 0</span></p><p><span style="font-size: 12px;">File name &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Inode number | Deleted status<br  />Directory block 9249:<br  />. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2<br  />.. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2<br  />lost+found &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;11<br  />haha &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;12 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Deleted<br  />zabbix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;17432577<br  />test1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-size: 12px;color: rgb(255, 0, 0);background-color: rgb(255, 255, 153);">12</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-size: 12px;background-color: rgb(204, 255, 204);">Deleted</span><br  />wangshibo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-size: 12px;color: rgb(255, 0, 0);background-color: rgb(255, 255, 153);">13 </span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size: 12px;background-color: rgb(204, 255, 204);">Deleted</span></span></p><p><span style="color: rgb(0, 0, 255);">如上可以看出，被删除的两个文件test1和wangshibo已经被找到，状态为已经删除。</span><br  /><span style="color: rgb(0, 0, 255);">接下来就将它们恢复出来：</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# <span style="color: rgb(255, 0, 255);">extundelete --restore-inode <span style="color: rgb(255, 0, 0);background-color: rgb(255, 255, 153);">12</span> /dev/sda2</span><br  />WARNING: Extended attributes are not restored.<br  />Loading filesystem metadata ... 6250 groups loaded.<br  />Loading journal descriptors ... 46 descriptors loaded.<br  />Restored inode 12 to file RECOVERED_FILES/file.12<br  />[root@slave-node ~]# <span style="color: rgb(255, 0, 255);">extundelete --restore-inode <span style="color: rgb(255, 0, 0);background-color: rgb(255, 255, 153);">13</span> /dev/sda2</span><br  />WARNING: Extended attributes are not restored.<br  />Loading filesystem metadata ... 6250 groups loaded.<br  />Loading journal descriptors ... 46 descriptors loaded.<br  />Restored inode 13 to file RECOVERED_FILES/file.13</span></p><p><span style="font-size: 12px;">[root@slave-node ~]# <span style="font-size: 12px;color: rgb(153, 51, 0);">ls RECOVERED_FILES/</span><br  />file.12 &nbsp;file.13<br  />[root@slave-node ~]# <span style="font-size: 12px;color: rgb(153, 51, 0);">mount /dev/sda2 /home/ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size: 12px;color: rgb(0, 128, 0);"> //重新挂载home分区</span></span><br  />[root@slave-node ~]# mv RECOVERED_FILES/file.12 /home/test1<br  />[root@slave-node ~]# mv RECOVERED_FILES/file.13 /home/wangshibo</span></p><p><span style="color: rgb(153, 51, 0);">再次查看home分区，发现删除的文件已经恢复回来了,很强大！！！</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# cd /home/<br  />[root@slave-node home]# ls<br  />lost+found &nbsp;test1 &nbsp;wangshibo &nbsp;zabbix<br  />[root@slave-node home]# cat test1 <br  />123456<br  />[root@slave-node home]# cat wangshibo <br  />hahahahha</span></p><p><span style="background-color: rgb(255, 255, 153);">------------------------------------------------------------------------------------------------------</span><br  /><span style="background-color: rgb(255, 255, 153);">上面介绍的是在ext4文件格式下的文件删除后的恢复，那如果是ext3文件格式下的文件删除后想恢复，怎么办呢？</span><br  /><span style="color: rgb(255, 0, 0);">可以使用<strong><span style="background-color: rgb(204, 255, 204);">debugfs工具</span></strong>，这是linux系统自带工具，debugfs恢复Ext3的文件系统中被rm、rm -f 掉的文件。</span></p><p><span style="color: rgb(0, 0, 255);">实例说明：</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# <span style="color: rgb(0, 128, 0);">df -T</span><br  />Filesystem &nbsp; &nbsp; Type &nbsp;1K-blocks &nbsp; &nbsp;Used Available Use% Mounted on<br  /><span style="color: rgb(255, 0, 0);">/dev/sda3</span> &nbsp; &nbsp; &nbsp;<strong><span style="color: rgb(255, 0, 255);">ext3</span></strong> &nbsp;151189708 2370036 141139672 &nbsp; 2% /<br  />tmpfs &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tmpfs &nbsp;32960412 &nbsp; &nbsp; &nbsp; 0 &nbsp;32960412 &nbsp; 0% /dev/shm<br  />/dev/sda1 &nbsp; &nbsp; &nbsp;ext3 &nbsp; &nbsp; 198337 &nbsp; 26798 &nbsp; &nbsp;161299 &nbsp;15% /boot</span></p><p><span style="font-size: 12px;"><span style="font-size: 12px;color: rgb(0, 0, 255);">创建一个文件</span><br  />[root@slave-node ~]# <span style="font-size: 12px;color: rgb(0, 128, 0);">mkdir test</span><br  />[root@slave-node ~]# <span style="font-size: 12px;color: rgb(0, 128, 0);">echo "123456" &gt; /root/test/test.file</span></span></p><p><span style="font-size: 12px;"><span style="font-size: 12px;color: rgb(0, 0, 255);">删除文件</span><br  />[root@slave-node ~]# <span style="font-size: 12px;color: rgb(0, 128, 0);">rm -rf /root/test/test.file</span></span></p><p><span style="color: rgb(0, 0, 255);">接着运用系统自带工具debugfs来恢复已删除的文件</span><br  /><span style="color: rgb(0, 0, 255);">首先打开，刚刚被删除文件所在的分区</span><br  /><span style="color: rgb(255, 102, 0);">注意上面显示的有&lt;&gt;尖括号内的数字就是我们要找的文件Inode号，执行logdump –i &lt;8654024&gt;</span><br  /><span style="font-size: 12px;">[root@slave-node ~]#<span style="color: rgb(0, 128, 0);"> debugfs</span> <br  />debugfs 1.41.12 (17-May-2010)<br  />debugfs: &nbsp;<span style="color: rgb(255, 0, 0);">open /dev/sda3</span><br  />debugfs: &nbsp;<span style="color: rgb(255, 0, 0);">ls -d /root/test</span><br  /> 8654023 &nbsp;(12) . &nbsp; &nbsp;8519681 &nbsp;(4084) .. &nbsp; <span style="background-color: rgb(255, 255, 0);">&lt;8654024&gt;</span> (4072) <span style="background-color: rgb(255, 204, 153);">test.file</span> &nbsp; <br  />debugfs:<span style="color: rgb(255, 0, 0);"> &nbsp;logdump -i <span style="background-color: rgb(255, 255, 0);">8654024</span></span><br  />FS block 1006 logged at sequence 404351, journal block 7241<br  />(inode block for inode 15):<br  />Inode: 15 Type: regular Mode: 0664 Flags: 0×0 Generation: 0<br  />User: 0 Group: 0 Size: 20<br  />File ACL: 0 Directory ACL: 0<br  />Links: 1 Blockcount: 8<br  />Fragment: Address: 0 Number: 0 Size: 0<br  />ctime: 0×48159f2d — Mon Apr 28 15:25:57 2008<br  />atime: 0×48159f27 — Mon Apr 28 15:25:51 2008<br  />mtime: 0×4806f070 — Thu Apr 17 12:08:40 2008<br  />Blocks: (0+1): 102348<br  />No magic number at block 7247: end of journal.</span></p><p><span style="color: rgb(0, 0, 255);">执行完命令后，显示了一屏信息，需要注意的是下面Blocks这一行后面的值（如上信息，需要记住Blocks这一行后面的数字102348）</span></p><p><span style="color: rgb(128, 0, 128);">输入quit，退出debugfs</span><br  /><span style="font-size: 12px;">debugfs: &nbsp;<span style="color: rgb(255, 0, 0);">quit</span><br  />[root@slave-node ~]#</span></p><p><span style="color: rgb(0, 0, 255);">执行如下命令进行恢复</span>：<br  /><span style="font-size: 12px;">[root@slave-node ~]# <span style="color: rgb(0, 128, 0);">dd if=/dev/sda3 of=/tmp/test.file.bk bs=4096 count=1 skip=102348</span><br  />1+0 records in<br  />1+0 records out<br  />4096 bytes (4.1 kB) copied, 0.0110028 s, 372 kB/s</span></p><p><span style="color: rgb(0, 0, 255);">最后查看tmp目录下，发现已经恢复了我们之前删除的文件内容</span><br  /><span style="font-size: 12px;">[root@slave-node ~]# cd /tmp/<br  />[root@slave-node tmp]# cat test.file.bk<br  />[root@slave-node tmp]# mv test.file.bk /root/test.file<br  />[root@slave-node tmp]# cat /root/test.file<br  />123456</span></p><p>***************当你发现自己的才华撑不起野心时，就请安静下来学习吧***************</p><p><br  /></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">kevingrace</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='http://www.cnblogs.com/kevingrace/p/6145308.html' target='_blank'>
+			阅读全文
+		</a>
+	</div>
+</body>

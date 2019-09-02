@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		Linux的车载发行版AGL及Renesas公司采用Docker
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661807&amp;idx=1&amp;sn=341df8fd76b9092b8bfda33755b44c6b&amp;chksm=810f2eb2b678a7a47fccdd098efe6bcb1ec68c12548c21fb5aedbef580ba3fdfa2699c3edb94&amp;scene=27#wechat_redirect&cpage=48' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">Linux的车载发行版AGL及Renesas公司采用Docker</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        IOT BZH
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2017-07-13</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <p>根据《AGL-Application-SDK-Kickstart-on-Renesas-Porter-board》,Renesas的AGL BSP-发布的时候，采用Docker部署Yocto和AGL SDK的开发环境，目的如下：<br  /></p><section style="background-color: rgb(255, 255, 255); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" margin-top: 10px; margin-bottom: 10px;  box-sizing: border-box; "><section class="" style="display: inline-block; width: 100%; border-width: 1px; border-style: solid; border-color: rgb(192, 200, 209); padding: 10px; background-color: rgb(239, 239, 239); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="   box-sizing: border-box; "><section class="" style="font-size: 12px; box-sizing: border-box;"><p style="box-sizing: border-box;">The Yocto build environment is subject to many variations depending on:</p><p style="box-sizing: border-box;">•Yocto/Poky/OpenEmbedded versions and revisions</p><p style="box-sizing: border-box;">•Specific layers required for building either the BSP or the whole distribution</p><p style="box-sizing: border-box;">•Host distribution and version1</p><p style="box-sizing: border-box;">•User environment</p><p style="box-sizing: border-box;"><br  /></p><p style="box-sizing: border-box;">In particular, most of the recent Linux host distributions (Ubuntu 15.04, Debian 8.2, OpenSuse 42.1, CentOS 7.x) do not officially support building with Yocto 1.7. Unfortunately, there's no easy solution to solve this kind of problem: we will still observe for quite a long time a significant gap between the latest OS versions and a fully certified build environment.</p><p style="box-sizing: border-box;"><br  /></p><p style="box-sizing: border-box;">To circumvent those drawbacks and get more deterministic results amongst the AGL community of developers and integrators, using virtualization is a good workaround. A Docker image is now available for AGL SDK: it is faster, easier and less error-prone to use a prepared Docker container because the image contains all necessary components to build and deploy an AGL image, including a validated base OS, independent of the user’s host OS. Moreover, light virtualization mechanisms used by Docker do not add much overhead when building: performances are nearly equal to native mode.</p></section></section></section></section></section></section></section><p>根据《AGL/Phase2 - Devkit Build from scratch: AGL image and SDK for Porter》，Docker也被采用：<br  /></p><section style="background-color: rgb(255, 255, 255); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" margin-top: 10px; margin-bottom: 10px;  box-sizing: border-box; "><section class="" style="display: inline-block; width: 100%; border-width: 1px; border-style: solid; border-color: rgb(192, 200, 209); padding: 10px; background-color: rgb(239, 239, 239); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="   box-sizing: border-box; "><section class="" style="font-size: 12px; box-sizing: border-box;"><p style="box-sizing: border-box;">The AGL DevKit allows developers to rebuild a complete bootable image and its</p><p style="box-sizing: border-box;">associated SDK from source code. It uses Yocto/Poky version 2.x with latest</p><p style="box-sizing: border-box;">version of Renesas BSP and enables low-level development of drivers and</p><p style="box-sizing: border-box;">system services.</p><p style="box-sizing: border-box;">The AGL DevKit contains:</p><p style="box-sizing: border-box;">• This guide, which describes how to create a Docker container able to</p><p style="box-sizing: border-box;">build AGL images and associated SDKs. The container is also suitable to</p><p style="box-sizing: border-box;">build AGL Applications independently of Yocto/Bitbake.</p><p style="box-sizing: border-box;">• Applications templates and demos available on Github, to start</p><p style="box-sizing: border-box;">developing various types of applications independently of Yocto:</p><p style="box-sizing: border-box;">◦ services</p><p style="box-sizing: border-box;">◦ native applications</p><p style="box-sizing: border-box;">◦ HTML5 applications</p><p style="box-sizing: border-box;">◦ ...</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p></section></section></section></section></section></section></section><p>可见Docker的使用已经深入到嵌入式Linux的开发环境，这是一个人人都值得学会Docker的时代，一如我们都学会git。</p><section style="background-color: rgb(255, 255, 255); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" margin-top: 0.5em; margin-bottom: 0.5em;  box-sizing: border-box; "><section style="border-top: 3px dashed rgb(249, 110, 87); box-sizing: border-box;" class=""></section></section></section></section><p>这两篇文档的下载地址为：</p><p><span style="font-size: 12px;">http://docs.automotivelinux.org/docs/devguides/en/dev/reference/iotbzh2016/sdk/AGL-Devkit-Image-and-SDK-for-porter.pdf</span></p><p><span style="font-size: 12px;">http://iot.bzh/download/public/2016/sdk/AGL-Application-SDK-Kickstart-on-Renesas-Porter-board.pdf</span></p><section style="background-color: rgb(255, 255, 255); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" margin-top: 10px; margin-bottom: 10px; text-align: center;  box-sizing: border-box; "><section class="" style="display: inline-block; vertical-align: top; width: 2em; box-sizing: border-box;"><section style="width: 0px; border-bottom: 0.5em solid rgb(249, 110, 87); border-right: 1em solid transparent !important; border-left: 1em solid transparent !important; box-sizing: border-box;"></section><section class="" style="background-color: rgba(211, 207, 206, 0.118); padding-right: 5px; padding-left: 5px; box-sizing: border-box;"><section style="box-sizing: border-box;">小贴士</section></section><section style="width: 0px; border-top: 0.5em solid rgb(249, 110, 87); border-left: 1em solid transparent !important; border-right: 1em solid transparent !important; box-sizing: border-box;"></section></section></section></section></section><p><span style="font-size: 14px;">阅读本文快速入门Docker：</span><a href="https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661793&amp;idx=1&amp;sn=61f7ab3bd6d17c858b9ea5bd4060416a&amp;chksm=810f2ebcb678a7aa2c8b8883d7e31d029848200c8fc6046a9064665ef279ff5614fbc5a0b0ab&amp;scene=21#wechat_redirect" target="_blank" style="font-size: 14px; text-decoration: underline;"><span style="font-size: 14px;">&nbsp;宋宝华：Docker 最初的2小时(Docker从入门到入门)</span></a></p><p><br  /></p><p><span style="color: rgb(61, 167, 66);">&gt;&gt;&gt; 往期精彩内容</span></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661800&amp;idx=1&amp;sn=836ba00137d94fa83acc3508020c1399&amp;chksm=810f2eb5b678a7a30f6c9f475871df85c00c11cf6e00427c280ab5985582b21ab9b0441cb1ad&amp;scene=21#wechat_redirect" target="_blank">最简单Linux内核和驱动考试题（含答案与详细解析）</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661805&amp;idx=1&amp;sn=25f08a8af274a8bf3ef839720557678e&amp;chksm=810f2eb0b678a7a6d21d2da29417b90db7dc14449143b9775a89568192ad5f3415966f0bd0a1&amp;scene=21#wechat_redirect" target="_blank">在Linuxer上把一个问题说清或者看懂有惊喜</a><span style="color: rgb(122, 79, 214);">(Linuxer征稿)</span><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661781&amp;idx=1&amp;sn=b8abac35061eedec80fbf529d5aa9517&amp;chksm=810f2e88b678a79eaac389a5a57fd793e36ed213e070cf07c9a5f0575604f7962290341f19c1&amp;scene=21#wechat_redirect" target="_blank">《Linux总线、设备、驱动模型》直播PPT分享</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661748&amp;idx=1&amp;sn=254816ad66a30d6599d4695b87e9ec93&amp;chksm=810f2169b678a87f84b732f70ee20a81caf773f7b0aa8bb85f8a1abb8dc8d13bc0cecc3411e7&amp;scene=21#wechat_redirect" target="_blank">让天堂的归天堂，让尘土的归尘土——谈Linux的总线、设备、驱动模型</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661728&amp;idx=1&amp;sn=75564d16743b65c3ad84f91ffb74660e&amp;chksm=810f217db678a86b9361c5b4b8b920ac282361832a84fd32dc2084f1aaed42f0ce102a45146f&amp;scene=21#wechat_redirect" target="_blank">宋宝华： 论一个程序员问问题的自我修养</a><br  /></p><p><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652661684&amp;idx=1&amp;sn=3305d6409f69cdb82e630f8c295f4aec&amp;chksm=810f2129b678a83f40896fac0cbd427a9788a7f701088937b4feb7485639a4cd1c29c519eba8&amp;scene=21#wechat_redirect" target="_blank">内核开发者伍鹏（Bryan Wu）：好奇的旅程</a><br  /></p><p><span style="color: rgb(61, 167, 66);">....</span></p><section style="background-color: rgb(255, 255, 255); box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style="   box-sizing: border-box; "><section class="" style="display: inline-block; vertical-align: top; width: 51%; box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" margin-top: 40px; margin-right: 0%; margin-left: 0%;  box-sizing: border-box; "><section class="" style="letter-spacing: 0px; box-sizing: border-box;"><p style="box-sizing: border-box;">快，关注Linuxer这个公众号，一起涨姿势～</p></section></section></section></section><section class="" style="display: inline-block; vertical-align: top; width: 49%; box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="   box-sizing: border-box; " powered-by="xiumi.us"><section class="" style=" text-align: center; margin-top: 10px; margin-bottom: 10px;  box-sizing: border-box; "><p><img data-s="300,640" data-type="png" src="data:image/PNG;base64,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oqJCRUXlWhUVFbtSUVFRUTk8PGQ4PDxkeN/73scPfvADzp07x5vf/GYuX75MRcWLefe7303Fm970JioqLly4wOOPP87b3/52VK5VUVFRUVFxLRUVFRUVlV1NbHgxX/7yl5nzy1/+kjNnzvDhD3+Ym266iWmauOrSpUss+dCHPsTR0RHD7bffzlve8hZuuOEGXi0TG17Mgw8+yAv97W9/46677uLChQt89atf5apvfOMb/OUvf+H1r389u3riiSf4wx/+wB133MHf//53fvSjH/HUU0/xYp588kk++tGP8otf/IJ7772Xq+655x5++tOfctUXv/hF/vGPf/D444/z6U9/muvSppfyzW9+s2s9/PDDvZRHH320l3LmzJkuXLjQ8Pzzz/eRj3yk4Z577umHP/xhly5d6sc//nHPPfdczzzzTJ/4xCcavv3tb/enP/2pZ555pt/85jdddfbs2e67776ueuCBB/rKV77Sf/7znx566KGGX/3qV33/+9/vYx/7WM8991zDxIaX8rWvfY1rXbhwgZfyr3/9i31V/OQnP+GWW27hqqOjI86fP8+cZ599lmeffZY777yTc+fO8bvf/Y7Tp0/z/PPP84EPfIBvfetbvO51r+PXv/41Fy9epOLs2bPceOONfO973+OGG25gOGDDki996Uvcfffd/Pvf/+aDH/wgL+Wd73wnL8c0Tdx1111cdfLkSZ566iluu+025pw4cYLLly/zyCOP8MlPfpKbbrqJxx57jM9//vO84Q1v4KqLFy/y5JNPcuLECS5fvsxnPvMZDg4OuNbEhiV33303V504cYJbbrmF3/72t8z54x//yK233spLufnmm7leKpcuXeLGG2/k1KlTXOvEiRNcdf/993PmzBluuukmrnrrW9/K6dOnuf/++7n//vt54IEHeNvb3sZV0zRxcHDAC01s2NWdd97J2bNneaH3vOc9LLn33ns5efIkVz3zzDMsOTo64ujoiK9//etcvHiRp59+mkuXLvGOd7yDf/7zn/z85z/n6OiId73rXRweHvLEE0/w8Y9/nMuXL/Pf//6X3//+9yw5YMM+vvCFL/BCFy9e5Oabb+bFnD9/ns997nNc67Of/SzDo48+yrUeeughTp8+zRvf+Ea+853v8PDDD/Pe976X8+fP8+c//5mf/exnfOpTn+LWW2/lvvvu49y5c3z3u9/lwQcf5J577uHpp5/m/e9/P3fccQd//etfeTF2BRvWbGLD2k1sWLv/AwPrAc4hUP43AAAAAElFTkSuQmCC " src="Ass1lsY6byvPIaOr93gURat7XyPsNTHBYckJuG1egG9DiaW3EPbUNfWjhGZiazTsORsV7BJfX0Biac28Kiaa9pEZqQ"  class="" data-ratio="1" data-w="129"  /></p></section></section></section></section></section></section>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">IOT BZH</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='https://www.52pojie.cn/' target='_blank'>
+			吾爱破解论坛
+		</a>
+	</div>
+</body>

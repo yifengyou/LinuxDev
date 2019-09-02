@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+	<title>
+		利用gcc的__attribute__编译属性section子项构建初始化函数表
+	</title>
+	<script src='https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js'>
+	</script>
+	<style>
+		a {color: #607fa6;text-decoration:none;word-wrap:break-word;word-break:break-all;}.rich_media_title{padding-bottom:10px;margin-bottom:14px;border-bottom:1px solid #e7e7eb;font-weight:400;} .rich_media_meta_list{font-size:14px;margin-bottom: 22px;}
+		.rich_media_meta{display:inline-block;vertical-align:middle;margin-right:8px;margin-bottom:10px;font-size:14px;}.rich_media_meta_text{color:#8c8c8c;color:rgba(0, 0, 0, 0.3)}.rich_media_meta_list
+		em {font-style: normal;}@media screen and (max-width:768px){.rich_media{position:
+		relative;padding: 20px 15px 15px;background-color: #fff;}}.rich_media_content{text-align:justify;} .rich_media_content * {max-width:100%!important;box-sizing: border-box!important;-webkit-box-sizing:
+		border-box!important;word-wrap: break-word!important;}.rich_media_content
+		blockquote {margin: 0;padding-left: 10px;border-left: 3px solid #dbdbdb;}.rich_media_content
+		.list-paddingleft-2 {padding-left: 2.2em;}a.rich_media_meta_nickname{display: none;}@media screen and (min-width:1025px){.rich_media{position:relative;}a.rich_media_meta_nickname{display:inline-block!important;}span.rich_media_meta_nickname
+		{display: inline-block!important;}.rich_media {width:677px;margin-left:auto;margin-right:auto;}}a.fwjm{font-size: 12px;color: #ececec;}.tenvideo_player {position: relative;width:
+		100 %;height: 100 %;margin: auto;background: #000;}* {margin:0px;padding:0px;} body{line-height: 1.6;letter-spacing: .034em;}
+		.dy_all {text-align: center;margin: 30px 0;} .dy_all a {display: inline-block;height:
+		38px;line-height: 38px;padding: 0 18px;background-color: #009688;color:
+		#fff;white-space: nowrap;font-size: 14px;border: none;border-radius: 2px;cursor:
+		pointer;text-align: center;outline: 0;-webkit-appearance: none;transition:
+		all .3s;-webkit-transition: all .3s;box-sizing: border-box;} img{max-width: 677px!important;}
+
+		.crawler-info{padding: 8px 0;} .article-link>img{margin-left: 20px;width: 16px;}
+		.comment-item::before,.comment-item::after{content:'';display:block;height:0;visibility:hidden;clear:both;*zoom:1;} .comment-item{margin-bottom:30px;}
+		.avatar{width:12%; padding-right:10px;float:left;box-sizing:border-box;} .avatar img{width:100%;}
+		.comment-body{float:left;width:88%;} .comment-body .comment-info{color:#b3b3b3;margin-bottom:4px;margin-top: -5px;} .comment-body .comment-info>span:last-child{float:right;} 
+		.comment-author{border-left:4px solid green;padding-left:6px;margin:8px 0;}
+
+		@media screen and (max-width: 420px) {.article-link>img {margin-left: 0px;}}
+		@media screen and (min-width: 480px) {.avatar {width: 9%;}.comment-body {width: 91%;}}
+	</style>
+</head>
+<body>
+	<div id='js_article' class='rich_media'>
+		<div class="crawler-info">
+			<a href='https://www.52pojie.cn' class='fwjm' target='_blank'>
+				提供的爬取软件来源于：52pojie.cn@夜泉 免费下载使用
+			</a>
+			<a href='https://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652663292&amp;idx=1&amp;sn=e93cb7298986607df6c15e203b08371e&amp;chksm=810f2b61b678a27788560c31ff30d23d91d6e2b3079d9b62f7801146eedd697480af6cbc4701&amp;scene=27#wechat_redirect&cpage=35' target='_blank' class="article-link">
+				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk4QUEzQzVDNkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk4QUEzQzVENkNGQjExRTk5NzNBQ0VBMjgzMjY1NjkwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OThBQTNDNUE2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OThBQTNDNUI2Q0ZCMTFFOTk3M0FDRUEyODMyNjU2OTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5TKSKsAAAAclBMVEUuLi77+/stLS1VVVXx8fFOTk7s7Ozt7e1qamp5eXlNTU2WlpZFRUU6Ojrq6urn5+d/f3/8/Pw9PT0/Pz+YmJg8PDyZmZlAQECfn5+QkJBBQUFra2vo6OhDQ0OSkpKenp5WVlY+Pj7r6+tpaWksLCz///9o6ILHAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAACNSURBVHjajJHpEoIwDISDVMotcnuCmLz/K9KCdlqO6v7p7Mw3yW4KxG85fnUkIVfZ5J0SsCtqcgRw0HzjQYY2AAOIdRuaK4ReAPJ5nmglL5qICahpU60C0uXguQ9TgIwGJoDnT9z/ABmxt60ot0N2CsDLfb9mvBxs9ql+n5o9bEDBgbif7/1F4g80CjAAqrVAnnsm5f8AAAAASUVORK5CYII=" />
+			</a>
+		</div>
+		<div id="img-content">
+
+                
+                <h2 class="rich_media_title" id="activity-name">利用gcc的__attribute__编译属性section子项构建初始化函数表</h2>
+                <div id="meta_content" class="rich_media_meta_list">
+                                                                                                            <span class="rich_media_meta rich_media_meta_text">
+                                                        alex_wei
+                                                    </span>
+                                                                
+                                        <span class="rich_media_meta rich_media_meta_nickname" id="profileBt"><a href="javascript:void(0);">Linux阅码场</a>
+                      <div id="js_profile_qrcode" class="profile_container" style="display:none;">
+                          <div class="profile_inner">
+                              <strong class="profile_nickname">Linux阅码场</strong>
+                              <img class="profile_avatar" id="js_profile_qrcode_img" src="" alt="">
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">微信号</label>
+                              <span class="profile_meta_value">LinuxDev</span>
+                              </p>
+
+                              <p class="profile_meta">
+                              <label class="profile_meta_label">功能介绍</label>
+                              <span class="profile_meta_value">专业的Linux技术社区和Linux操作系统学习平台，内容涉及Linux内核,Linux内存管理,Linux进程管理,Linux文件系统和IO,Linux性能调优,Linux设备驱动以及Linux虚拟化和云计算等各方各面.</span>
+                              </p>
+                              
+                          </div>
+                          <span class="profile_arrow_wrp" id="js_profile_arrow_wrp">
+                              <i class="profile_arrow arrow_out"></i>
+                              <i class="profile_arrow arrow_in"></i>
+                          </span>
+                      </div>
+                    </span>
+
+
+                    <em id="publish_time" class="rich_media_meta rich_media_meta_text">2018-01-04</em>
+
+
+
+
+
+                </div>
+
+                
+                
+                                
+                
+                
+                
+                                                
+                                                                
+                                
+                
+                <div class="rich_media_content " id="js_content">
+                    
+
+                    
+
+                    
+                    
+                    <section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;"><section class="" style="padding: 5px;background-color: rgb(249, 110, 87);box-sizing: border-box;text-align: left;"><section class="" style="display: inline-block;width: 100%;border-color: white;padding: 10px;border-style: solid;border-width: 2px;box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="text-align: center;color: rgb(255, 255, 255);font-size: 24px;box-sizing: border-box;"><p style="box-sizing: border-box;"><span style="font-size: 12px;"></span></p><p style="color: rgb(255, 255, 255);font-size: 24px;text-align: left;white-space: normal;background-color: rgb(249, 110, 87);box-sizing: border-box;"><span style="font-size: 14px;">本文转发自：https://my.oschina.net/u/180497/blog/177206</span></p><p style="color: rgb(255, 255, 255);font-size: 24px;text-align: left;white-space: normal;background-color: rgb(249, 110, 87);box-sizing: border-box;"><span style="font-size: 14px;">它解决宋宝华上次在<a href="http://mp.weixin.qq.com/s?__biz=MzAwMDUwNDgxOA==&amp;mid=2652662685&amp;idx=2&amp;sn=74bbc8d753c7696832b5b0c827fd1d66&amp;chksm=810f2d00b678a416807bf461879cff7d0836a445a0a4233130556df09f90b5395f158e1c112e&amp;scene=21#wechat_redirect" target="_blank" style="text-decoration: underline;font-size: 14px;color: rgb(2, 30, 170);"><strong><span style="font-size: 14px;color: rgb(2, 30, 170);">《C语言的面向对象（面向较大型软件）》ppt分享和ppt注解</span></strong></a>中提到的多模块软件的初始化的问题</span></p></section></section></section></section></section></section></section></section><p style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;margin-bottom: 16px;color: rgb(61, 70, 77);">gcc的__attribute__编译属性有很多子项，用于改变作用对象的特性。这里讨论section子项的作用。</p><p style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;margin-bottom: 16px;color: rgb(61, 70, 77);"><span style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;color: rgb(17, 17, 17);font-family: Arial, Helvetica, sans-serif;line-height: 21px;">__attribute__的section子项使用方式为：</span></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">__attribute__((section("section_name")))</p></section></section></section></section></section></section></section><p><span style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;font-size: 16px;color: rgb(17, 17, 17);font-family: Arial, Helvetica, sans-serif;line-height: 21px;background-color: rgb(255, 255, 255);">其作用是将作用的函数或数据放入指定名为"section_name"的段。</span><span style="color: rgb(61, 70, 77);"></span></p><p style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;margin-bottom: 16px;color: rgb(61, 70, 77);">看以下程序片段：</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">#include &lt;unistd.h&gt;</p><p style="box-sizing: border-box;">#include &lt;stdint.h&gt;</p><p style="box-sizing: border-box;">#include &lt;stdio.h&gt;</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">typedef void (*myown_call)(void);</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">extern myown_call _myown_start;</p><p style="box-sizing: border-box;">extern myown_call _myown_end;</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">#define _init __attribute__((unused, section(".myown")))</p><p style="box-sizing: border-box;">#define func_init(func) myown_call _fn_##func _init = func</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">static void mspec1(void)</p><p style="box-sizing: border-box;">{</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; write(1, "aha!\n", 5);</p><p style="box-sizing: border-box;">}</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">static void mspec2(void)</p><p style="box-sizing: border-box;">{</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; write(1, "aloha!\n", 7);</p><p style="box-sizing: border-box;">}</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">static void mspec3(void)</p><p style="box-sizing: border-box;">{</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; write(1, "hello!\n", 7);</p><p style="box-sizing: border-box;">}</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">func_init(mspec1);</p><p style="box-sizing: border-box;">func_init(mspec2);</p><p style="box-sizing: border-box;">func_init(mspec3);</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">/* exactly like below:</p><p style="box-sizing: border-box;">static myown_call mc1&nbsp; __attribute__((unused, section(".myown"))) = mspec1;</p><p style="box-sizing: border-box;">static myown_call mc2&nbsp; __attribute__((unused, section(".myown"))) = mspec2;</p><p style="box-sizing: border-box;">static myown_call mc3&nbsp; __attribute__((unused, section(".myown"))) = mspec3;</p><p style="box-sizing: border-box;">*/</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">void do_initcalls(void)</p><p style="box-sizing: border-box;">{</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; myown_call *call_ptr = &amp;_myown_start;</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; do {</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fprintf (stderr, "call_ptr: %p\n", call_ptr);</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (*call_ptr)();</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ++call_ptr;</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; } while (call_ptr &lt; &amp;_myown_end);</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">}</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p><p style="box-sizing: border-box;">int main(void)</p><p style="box-sizing: border-box;">{</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; do_initcalls();</p><p style="box-sizing: border-box;">&nbsp; &nbsp; &nbsp; &nbsp; return 0;</p><p style="box-sizing: border-box;">}</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);">在自定义的.myown段依次填入mspec1/mspec2/mspec3的函数指针，并在do_initcalls中依次调用，从而达到构造并调用初始化函数列表的目的。</span></p><p style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;margin-bottom: 16px;color: rgb(61, 70, 77);">两个extern变量：</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">extern myown_call _myown_start;</p><p style="box-sizing: border-box;">extern myown_call _myown_end;</p></section></section></section></section></section></section></section><p>来自ld的链接脚本，可以使用：</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">ld --verbose</p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);">获取内置lds脚本，并在：</span></p><p><br  /></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">__bss_start = .;</p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);">之前添加以下内容：</span><span style="color: rgb(61, 70, 77);"></span><br  /></p><p><br  /></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">_myown_start = .;</p><p style="box-sizing: border-box;">&nbsp; .myown&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: { *(.myown) } = 0x90000000</p><p style="box-sizing: border-box;">&nbsp; _myown_end = .;</p><p style="box-sizing: border-box;">&nbsp; code_segment&nbsp; &nbsp; : { *(code_segment) }</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);">即定义了.myown段及_myown_start/_myown_end变量（0x90000000这个数值可能需要调整）。</span></p><p style="box-sizing: inherit;-webkit-tap-highlight-color: transparent;margin-bottom: 16px;color: rgb(61, 70, 77);">保存修改后的链接器脚本，假设程序为s.c，链接器脚本保存为s.lds，使用以下命令编译：</p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">gcc s.c -Wl,-Ts.lds</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);">执行结果：</span><span style="color: rgb(61, 70, 77);"></span><br  /></p><p><br  /></p><section style="background-color: rgb(255, 255, 255);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="margin-top: 10px;margin-bottom: 10px;box-sizing: border-box;"><section class="" style="display: inline-block;width: 100%;border-width: 1px;border-style: solid;border-color: rgb(192, 200, 209);padding: 10px;background-color: rgb(239, 239, 239);box-sizing: border-box;"><section class="Powered-by-XIUMI V5" style="box-sizing: border-box;" powered-by="xiumi.us"><section class="" style="box-sizing: border-box;"><section class="" style="font-size: 10px;box-sizing: border-box;"><p style="box-sizing: border-box;">[root@localhost ]# ./a.out&nbsp;</p><p style="box-sizing: border-box;">call_ptr: 0x8049768</p><p style="box-sizing: border-box;">aha!</p><p style="box-sizing: border-box;">call_ptr: 0x804976c</p><p style="box-sizing: border-box;">aloha!</p><p style="box-sizing: border-box;">call_ptr: 0x8049770</p><p style="box-sizing: border-box;">hello!</p><p style="box-sizing: border-box;"><br style="box-sizing: border-box;"  /></p></section></section></section></section></section></section></section><p><span style="color: rgb(61, 70, 77);"></span><span style="color: rgb(61, 70, 77);">Have Fun!</span></p><p><span style="color: rgb(61, 70, 77);"><br  /></span></p>
+                </div>
+                
+
+                
+  <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display: none;"></div>
+
+
+                
+                <div class="read-more__area" id="js_more_read_area" style="display:none;">
+                    
+                </div>
+
+                
+                                <div class="reward_area tc reward_area_primary" id="js_preview_reward_author" style="display:none;">
+                    <div class="reward-avatar" style="display: none;" id="js_preview_reward_author_avatar">
+                        <img src="" alt="" id="js_preview_reward_author_head">
+                    </div>
+                    
+                                        <div class="reward-author" id="js_preview_reward_author_name">alex_wei</div>
+                                        <p class="reward_tips" id="js_preview_reward_author_wording" style="display:none;"></p>
+                    <p class="reward_button_wrp">
+                    
+                      <span class="reward_pop_panel">
+                        <img src="https://res.wx.qq.com/mpres/zh_CN/htmledition/pages/home/index/pic_mp_app4290ba.png" alt="">
+                        <strong>扫一扫下载订阅号助手，用手机发文章</strong>
+                      </span>
+                        <a class="reward_button" id='js_preview_reward_author_link' href="##"><span id="js_preview_reward_link_text">赞赏</span></a>
+                    </p>
+                </div>
+
+                <div class="reward_qrcode_area reward_area tc" id="js_preview_reward_qrcode" style="display:none;">
+                    <p class="tips_global">长按二维码向我转账</p>
+                    <p id="js_preview_reward_ios_wording" class="reward_tips" style="display:none;"></p>
+                    <span class="reward_qrcode_img_wrp"><img class="reward_qrcode_img" src="res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/appmsg/pic_reward_qrcode.2x42f400.png"></span>
+                    <p class="tips_global">受苹果公司新规定影响，微信 iOS 版的赞赏功能被关闭，可通过二维码转账支持公众号。</p>
+                </div>
+                            </div>
+		<div class="comment">
+			<h3 style="margin:26px 0;font-weight:100;padding-bottom:4px;border-bottom:1px solid #ccc;">精选留言</h3>
+		    暂无...
+		</div>
+	</div>
+	<div class='dy_all'>
+		<a href='https://my.oschina.net/u/180497/blog/177206' target='_blank'>
+			阅读全文
+		</a>
+	</div>
+</body>
